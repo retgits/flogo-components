@@ -1,0 +1,268 @@
+{
+ "name": "AlertingApp",
+ "description": " ",
+ "version": "0",
+ "type": "flogo:app",
+ "appModel": "1.0.0",
+ "resources": [
+  {
+   "id": "flow:getInvoker_GET",
+   "data": {
+    "name": "getInvoker_GET",
+    "description": null,
+    "tasks": [
+     {
+      "id": "LogMessage",
+      "name": "LogMessage",
+      "activity": {
+       "ref": "git.tibco.com/git/product/ipaas/wi-contrib.git/contributions/General/activity/log",
+       "input": {
+        "Log Level": "INFO"
+       },
+       "output": {},
+       "mappings": {
+        "input": [
+         {
+          "mapTo": "$INPUT['message']",
+          "type": "expression",
+          "value": "Received a message..."
+         }
+        ]
+       }
+      }
+     },
+     {
+      "id": "LogMessage1",
+      "name": "LogMessage1",
+      "activity": {
+       "ref": "git.tibco.com/git/product/ipaas/wi-contrib.git/contributions/General/activity/log",
+       "input": {
+        "Log Level": "INFO"
+       },
+       "output": {},
+       "mappings": {
+        "input": [
+         {
+          "mapTo": "$INPUT['message']",
+          "type": "expression",
+          "value": "Invoke DynamoDB"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "id": "InvokeDynamoDB",
+      "name": "InvokeDynamoDB",
+      "activity": {
+       "ref": "lambda/activity/lambda",
+       "input": {},
+       "output": {},
+       "mappings": {
+        "input": [
+         {
+          "mapTo": "$INPUT['accessKey']",
+          "type": "expression",
+          "value": ""
+         },
+         {
+          "mapTo": "$INPUT['secretKey']",
+          "type": "expression",
+          "value": ""
+         },
+         {
+          "mapTo": "$INPUT['payload']",
+          "type": "expression",
+          "value": "{}"
+         },
+         {
+          "mapTo": "$INPUT['arn']",
+          "type": "expression",
+          "value": ""
+         },
+         {
+          "mapTo": "$INPUT['region']",
+          "type": "expression",
+          "value": ""
+         }
+        ]
+       }
+      }
+     },
+     {
+      "id": "LogMessage2",
+      "name": "LogMessage2",
+      "activity": {
+       "ref": "git.tibco.com/git/product/ipaas/wi-contrib.git/contributions/General/activity/log",
+       "input": {
+        "Log Level": "INFO"
+       },
+       "output": {},
+       "mappings": {
+        "input": [
+         {
+          "mapTo": "$INPUT['message']",
+          "type": "expression",
+          "value": "Invoke MySQL RDS"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "id": "InvokeMySQL",
+      "name": "InvokeMySQL",
+      "activity": {
+       "ref": "lambda/activity/lambda",
+       "input": {},
+       "output": {},
+       "mappings": {
+        "input": [
+         {
+          "mapTo": "$INPUT['arn']",
+          "type": "expression",
+          "value": ""
+         },
+         {
+          "mapTo": "$INPUT['region']",
+          "type": "expression",
+          "value": ""
+         },
+         {
+          "mapTo": "$INPUT['accessKey']",
+          "type": "expression",
+          "value": ""
+         },
+         {
+          "mapTo": "$INPUT['secretKey']",
+          "type": "expression",
+          "value": ""
+         },
+         {
+          "mapTo": "$INPUT['payload']",
+          "type": "expression",
+          "value": "{}"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "id": "ReplyToHTTPMessage",
+      "name": "ReplyToHTTPMessage",
+      "activity": {
+       "ref": "git.tibco.com/git/product/ipaas/wi-contrib.git/contributions/General/activity/reply",
+       "input": {
+        "Reply": "Success with Data",
+        "code": 200,
+        "message": "Ok",
+        "data": {
+         "metadata": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"dynamodata\": {\n      \"type\": \"object\",\n      \"properties\": {}\n    },\n    \"mysqldata\": {\n      \"type\": \"object\",\n      \"properties\": {}\n    }\n  }\n}",
+         "value": ""
+        }
+       },
+       "output": {},
+       "mappings": {
+        "input": [
+         {
+          "mapTo": "$INPUT['data']['dynamodata']",
+          "type": "expression",
+          "value": "$activity[InvokeDynamoDB].result"
+         },
+         {
+          "mapTo": "$INPUT['data']['mysqldata']",
+          "type": "expression",
+          "value": "$activity[InvokeMySQL].result"
+         }
+        ]
+       }
+      }
+     }
+    ],
+    "links": [
+     {
+      "id": 1,
+      "from": "LogMessage",
+      "to": "LogMessage1",
+      "type": "default"
+     },
+     {
+      "id": 2,
+      "from": "LogMessage1",
+      "to": "InvokeDynamoDB",
+      "type": "default"
+     },
+     {
+      "id": 3,
+      "from": "InvokeDynamoDB",
+      "to": "LogMessage2",
+      "type": "default"
+     },
+     {
+      "id": 4,
+      "from": "LogMessage2",
+      "to": "InvokeMySQL",
+      "type": "default"
+     },
+     {
+      "id": 5,
+      "from": "InvokeMySQL",
+      "to": "ReplyToHTTPMessage",
+      "type": "default"
+     }
+    ],
+    "metadata": {
+     "input": [],
+     "output": []
+    },
+    "explicitReply": true
+   }
+  }
+ ],
+ "triggers": [
+  {
+   "ref": "git.tibco.com/git/product/ipaas/wi-contrib.git/contributions/General/trigger/rest",
+   "name": "ReceiveHTTPMessage",
+   "description": null,
+   "settings": {
+    "port": 9999
+   },
+   "id": "ReceiveHTTPMessage",
+   "handlers": [
+    {
+     "description": null,
+     "settings": {
+      "Method": "GET",
+      "Path": "/invoker",
+      "OutputValidation": false
+     },
+     "outputs": {
+      "queryParams": {
+       "metadata": "{\"type\":\"object\",\"properties\":{}}",
+       "value": ""
+      },
+      "headers": {
+       "metadata": "{\"type\":\"object\",\"properties\":{}}",
+       "value": ""
+      }
+     },
+     "action": {
+      "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow",
+      "data": {
+       "flowURI": "res://flow:getInvoker_GET"
+      },
+      "mappings": {
+       "input": [],
+       "output": []
+      }
+     },
+     "reply": {
+      "code": 200
+     }
+    }
+   ]
+  }
+ ],
+ "ui": "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",
+ "contrib": "W3sicmVmIjoiZ2l0LnRpYmNvLmNvbS9naXQvcHJvZHVjdC9pcGFhcy93aS1jb250cmliLmdpdC9jb250cmlidXRpb25zL0dlbmVyYWwiLCJzM2xvY2F0aW9uIjoiaHR0cDovL3MzLXVzLXdlc3QtMi5hbWF6b25hd3MuY29tL3Byb2QtdGNpLXdpLWNvbnRyaWJzLXRpYmNvLWNvbS11cy13ZXN0LTIvVGliY28vR2VuZXJhbCJ9LHsicmVmIjoibGFtYmRhL2FjdGl2aXR5L2xhbWJkYSIsInMzbG9jYXRpb24iOiJodHRwOi8vczMtdXMtd2VzdC0yLmFtYXpvbmF3cy5jb20vcHJvZC10Y2ktd2ktY29udHJpYnMtdGliY28tY29tLXVzLXdlc3QtMi81eWhoa3I3ZHBzYWE0bnloZmZ1ZTdycXVvN2tkN3Z6NS9EZWZhdWx0L2xhbWJkYSJ9XQ=="
+}
