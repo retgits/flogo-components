@@ -1,0 +1,268 @@
+{
+  "name": "combinator",
+  "type": "flogo:app",
+  "version": "0.0.1",
+  "appModel": "1.0.0",
+  "description": "This app combines the result of two different Lambda calls into one",
+  "triggers": [
+    {
+      "id": "start_flow_as_a_function_in_lambda",
+      "ref": "github.com/TIBCOSoftware/flogo-contrib/trigger/lambda",
+      "name": "Start Flow as a function in Lambda",
+      "description": "Simple Lambda Trigger",
+      "settings": {},
+      "handlers": [
+        {
+          "action": {
+            "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow",
+            "data": {
+              "flowURI": "res://flow:invoker"
+            },
+            "mappings": {
+              "output": [
+                {
+                  "mapTo": "data",
+                  "type": "assign",
+                  "value": "response"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "receive_http_message",
+      "ref": "github.com/TIBCOSoftware/flogo-contrib/trigger/rest",
+      "name": "Receive HTTP Message",
+      "description": "Simple REST Trigger",
+      "settings": {
+        "port": "8888"
+      },
+      "handlers": [
+        {
+          "action": {
+            "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow",
+            "data": {
+              "flowURI": "res://flow:invoker"
+            },
+            "mappings": {
+              "output": [
+                {
+                  "mapTo": "data",
+                  "type": "assign",
+                  "value": "response"
+                },
+                {
+                  "mapTo": "code",
+                  "type": "literal",
+                  "value": 200
+                }
+              ]
+            }
+          },
+          "settings": {
+            "method": "GET",
+            "path": "/invoker"
+          }
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "id": "flow:invoker",
+      "data": {
+        "name": "Invoker",
+        "description": "This flow invokes and combines two Lambda functions",
+        "metadata": {
+          "output": [
+            {
+              "name": "response",
+              "type": "any"
+            }
+          ]
+        },
+        "tasks": [
+          {
+            "id": "log_2",
+            "name": "Log Start",
+            "description": "Simple Log Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+              "input": {
+                "message": "Start Orchestrator",
+                "flowInfo": "false",
+                "addToFlow": "false"
+              }
+            }
+          },
+          {
+            "id": "lambda_3",
+            "name": "Invoke DybamoDB Lambda Function",
+            "description": "Invoke AWS Lambda Function via ARN Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/lambda",
+              "input": {
+                "arn": null,
+                "region": null,
+                "accessKey": null,
+                "secretKey": null,
+                "payload": "{\"name\":\"dynamo\"}"
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "assign",
+                    "value": "$env.ACCESSKEY",
+                    "mapTo": "accessKey"
+                  },
+                  {
+                    "type": "assign",
+                    "value": "$env.DYNAMOARN",
+                    "mapTo": "arn"
+                  },
+                  {
+                    "type": "assign",
+                    "value": "$env.REGION",
+                    "mapTo": "region"
+                  },
+                  {
+                    "type": "assign",
+                    "value": "$env.SECRETKEY",
+                    "mapTo": "secretKey"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "log_4",
+            "name": "Log DynamoDB Output",
+            "description": "Simple Log Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+              "input": {
+                "message": null,
+                "flowInfo": "false",
+                "addToFlow": "false"
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "assign",
+                    "value": "$activity[lambda_3].result",
+                    "mapTo": "message"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "lambda_5",
+            "name": "Invoke MySQL Lambda",
+            "description": "Invoke AWS Lambda Function via ARN Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/lambda",
+              "input": {
+                "arn": null,
+                "region": null,
+                "accessKey": null,
+                "secretKey": null,
+                "payload": "{\"name\":\"mysql\"}"
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "assign",
+                    "value": "$env.ACCESSKEY",
+                    "mapTo": "accessKey"
+                  },
+                  {
+                    "type": "assign",
+                    "value": "$env.MYSQLARN",
+                    "mapTo": "arn"
+                  },
+                  {
+                    "type": "assign",
+                    "value": "$env.REGION",
+                    "mapTo": "region"
+                  },
+                  {
+                    "type": "assign",
+                    "value": "$env.SECRETKEY",
+                    "mapTo": "secretKey"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "log_6",
+            "name": "Log MYSQL Output",
+            "description": "Simple Log Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+              "input": {
+                "message": "",
+                "flowInfo": "false",
+                "addToFlow": "false"
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "assign",
+                    "value": "$activity[lambda_5].result",
+                    "mapTo": "message"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "actreturn_7",
+            "name": "Return",
+            "description": "Simple Return Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/actreturn",
+              "input": {
+                "mappings": [
+                  {
+                    "mapTo": "response",
+                    "type": "object",
+                    "value": {
+                      "dynamodboutput": "{{$activity[lambda_3].result}}",
+                      "mysqloutput": "{{$activity[lambda_5].result}}"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "links": [
+          {
+            "from": "log_2",
+            "to": "lambda_3"
+          },
+          {
+            "from": "lambda_3",
+            "to": "log_4"
+          },
+          {
+            "from": "log_4",
+            "to": "lambda_5"
+          },
+          {
+            "from": "lambda_5",
+            "to": "log_6"
+          },
+          {
+            "from": "log_6",
+            "to": "actreturn_7"
+          }
+        ]
+      }
+    }
+  ]
+}

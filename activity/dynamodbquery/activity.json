@@ -1,0 +1,56 @@
+{
+    "name": "dynamodbquery",
+    "type": "flogo:activity",
+    "ref": "github.com/retgits/flogo-components/activity/dynamodbquery",
+    "version": "0.1.0",
+    "title": "DynamoDB Query",
+    "description": "Executes a query against an Amazon DynamoDB",
+    "author": "retgits",
+    "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/dynamodbquery",
+    "inputs":[
+      {
+        "name": "AWSAccessKeyID",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "AWSSecretAccessKey",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "AWSDefaultRegion",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "DynamoDBTableName",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "DynamoDBKeyConditionExpression",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "DynamoDBFilterExpression",
+        "type": "string"
+      },
+      {
+        "name": "DynamoDBExpressionAttributes",
+        "type": "any",
+        "required": true
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "type": "any"
+      },
+      {
+        "name": "scannedCount",
+        "type": "string"
+      }
+    ]
+  }

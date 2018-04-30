@@ -1,0 +1,38 @@
+{
+    "name": "dynamodbinsert",
+    "type": "flogo:activity",
+    "ref": "github.com/retgits/flogo-components/activity/dynamodbinsert",
+    "version": "0.0.1",
+    "title": "DynamoDB Insert",
+    "description": "Insert a record in an Amazon DynamoDB",
+    "author": "retgits",
+    "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/dynamodbinsert",
+    "inputs":[
+      {
+        "name": "AWSAccessKeyID",
+        "type": "string"
+      },
+      {
+        "name": "AWSSecretAccessKey",
+        "type": "string"
+      },
+      {
+        "name": "AWSDefaultRegion",
+        "type": "string"
+      },
+      {
+        "name": "DynamoDBTableName",
+        "type": "string"
+      },
+      {
+        "name": "DynamoDBRecord",
+        "type": "any"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "type": "any"
+      }
+    ]
+  }

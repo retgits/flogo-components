@@ -1,0 +1,34 @@
+# serverless.yml
+#   see all config option at https://serverless.com/framework/docs/providers/aws/guide/serverless.yml/
+
+# Update the name of your service to match the name you specified when generating the IAM policy
+service: MySQLApp
+
+# We'll deploy to AWS
+provider:
+  name: aws
+  runtime: go1.x
+  stage: dev
+  # This is the region you can deploy to
+  region: us-west-2
+  memorySize: 128
+  # This means after one day the logs are removes
+  logRetentionInDays: 1
+  # These are the environment variables
+  environment:
+    DBNAME: x
+    DBHOST: x
+    DBUSER: x
+    DBPASS: x
+
+# This will create a special zip file with the contents needed to run on Lambda
+package:
+ exclude:
+   - ./**
+ include:
+   - ./bin/**
+
+# This section specifies which functions will be deployed and which handlers are needed
+functions:
+  mysql:
+    handler: bin/handler

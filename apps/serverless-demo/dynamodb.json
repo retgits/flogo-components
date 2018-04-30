@@ -1,0 +1,173 @@
+{
+  "name": "dynamoapp",
+  "type": "flogo:app",
+  "version": "0.0.1",
+  "appModel": "1.0.0",
+  "description": "This app executes a DynamoDB query and returns the values to the caller",
+  "triggers": [
+    {
+      "id": "dynamodb_lambda_trigger",
+      "ref": "github.com/TIBCOSoftware/flogo-contrib/trigger/lambda",
+      "name": "dynamodb_lambda_trigger",
+      "description": "Simple Lambda Trigger",
+      "settings": {},
+      "handlers": [
+        {
+          "action": {
+            "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow",
+            "data": {
+              "flowURI": "res://flow:query"
+            },
+            "mappings": {
+              "output": [
+                {
+                  "mapTo": "data",
+                  "type": "assign",
+                  "value": "response"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "receive_http_message",
+      "ref": "github.com/TIBCOSoftware/flogo-contrib/trigger/rest",
+      "name": "Receive HTTP Message",
+      "description": "Simple REST Trigger",
+      "settings": {
+        "port": "8888"
+      },
+      "handlers": [
+        {
+          "action": {
+            "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow",
+            "data": {
+              "flowURI": "res://flow:query"
+            },
+            "mappings": {
+              "output": [
+                {
+                  "mapTo": "data",
+                  "type": "assign",
+                  "value": "response"
+                },
+                {
+                  "mapTo": "code",
+                  "type": "literal",
+                  "value": 200
+                }
+              ]
+            }
+          },
+          "settings": {
+            "method": "GET",
+            "path": "/dynamodb"
+          }
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "id": "flow:query",
+      "data": {
+        "name": "Query",
+        "description": "This flow executes a DynamoDB query",
+        "metadata": {
+          "output": [
+            {
+              "name": "response",
+              "type": "any"
+            }
+          ]
+        },
+        "tasks": [
+          {
+            "id": "dynamodbquery_3",
+            "name": "DynamoDB Query",
+            "description": "Executes a query against an Amazon DynamoDB",
+            "activity": {
+              "ref": "github.com/retgits/flogo-components/activity/dynamodbquery",
+              "input": {
+                "DynamoDBTableName": "data",
+                "DynamoDBKeyConditionExpression": "itemtype = :value",
+                "DynamoDBFilterExpression": null,
+                "DynamoDBExpressionAttributes": "[{\"Name\":\":value\", \"Value\":\"address\"}]"
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "assign",
+                    "value": "$env.ACCESSKEY",
+                    "mapTo": "AWSAccessKeyID"
+                  },
+                  {
+                    "type": "assign",
+                    "value": "$env.REGION",
+                    "mapTo": "AWSDefaultRegion"
+                  },
+                  {
+                    "type": "assign",
+                    "value": "$env.SECRETKEY",
+                    "mapTo": "AWSSecretAccessKey"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "log_5",
+            "name": "Log data",
+            "description": "Simple Log Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+              "input": {
+                "message": null,
+                "flowInfo": "false",
+                "addToFlow": "false"
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "assign",
+                    "value": "$activity[dynamodbquery_3].result",
+                    "mapTo": "message"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "actreturn_6",
+            "name": "Return",
+            "description": "Simple Return Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/actreturn",
+              "input": {
+                "mappings": [
+                  {
+                    "mapTo": "response",
+                    "type": "assign",
+                    "value": "$activity[dynamodbquery_3].result"
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "links": [
+          {
+            "from": "dynamodbquery_3",
+            "to": "log_5"
+          },
+          {
+            "from": "log_5",
+            "to": "actreturn_6"
+          }
+        ]
+      }
+    }
+  ]
+}

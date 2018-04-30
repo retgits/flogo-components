@@ -1,0 +1,22 @@
+{
+  "name": "randomstring",
+  "type": "flogo:activity",
+  "ref": "github.com/retgits/flogo-components/activity/randomstring",
+  "version": "0.0.1",
+  "title": "Random String",
+  "description": "Creates a random string consisting with the length you specify",
+  "author": "retgits",
+  "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/randomstring",
+  "inputs":[
+    {
+      "name": "length",
+      "type": "integer"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "result",
+      "type": "string"
+    }
+  ]
+}

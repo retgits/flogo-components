@@ -1,0 +1,48 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Combinator",
+    "x-lastModified": "Apr 28, 2018 20:36PM PST"
+  },
+  "paths": {
+    "/invoker": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "schema": {
+              "$ref": "#/definitions/GiveNewSchemaNameHere"
+            },
+            "examples": {
+              "application/json": {
+                "dynamodata": {},
+                "mysqldata": {}
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "operationId": "getInvoker"
+      }
+    }
+  },
+  "definitions": {
+    "GiveNewSchemaNameHere": {
+      "type": "object",
+      "properties": {
+        "dynamodata": {
+          "type": "object",
+          "properties": {}
+        },
+        "mysqldata": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    }
+  }
+}

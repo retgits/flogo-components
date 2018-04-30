@@ -1,0 +1,41 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: payment-svc
+  name: payment-svc
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: payment-svc
+  template:
+    metadata:
+      labels:
+        run: payment-svc
+    spec:
+      containers:
+      - name: payment-svc
+        image: retgits/paymentservice:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: payment-svc
+  name: payment-svc
+  namespace: default
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    run: payment-svc
+  sessionAffinity: None
+  type: ClusterIP

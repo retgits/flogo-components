@@ -1,0 +1,185 @@
+{
+  "name": "paymentservice",
+  "type": "flogo:app",
+  "version": "0.0.1",
+  "description": "",
+  "triggers": [
+    {
+      "name": "Receive HTTP Message",
+      "ref": "github.com/TIBCOSoftware/flogo-contrib/trigger/rest",
+      "description": "Simple REST Trigger",
+      "settings": {
+        "port": "$env.HTTPPORT"
+      },
+      "id": "receive_http_message",
+      "handlers": [
+        {
+          "actionMappings": {
+            "input": [
+              {
+                "mapTo": "invoiceid",
+                "type": 1,
+                "value": "params.invoiceId"
+              }
+            ],
+            "output": [
+              {
+                "mapTo": "code",
+                "type": 2,
+                "value": 200
+              },
+              {
+                "mapTo": "data",
+                "type": 1,
+                "value": "response"
+              }
+            ]
+          },
+          "settings": {
+            "method": "GET",
+            "path": "/api/expected-date/:invoiceId",
+            "autoIdReply": "false",
+            "useReplyHandler": "true"
+          },
+          "actionId": "expected_payment"
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "description": "",
+      "data": {
+        "flow": {
+          "name": "ExpectedPayment",
+          "type": 1,
+          "attributes": [],
+          "rootTask": {
+            "id": "root",
+            "type": 1,
+            "tasks": [
+              {
+                "id": "randomnumber_2",
+                "name": "Random Number",
+                "description": "Creates a random number between min and max",
+                "type": 1,
+                "activityType": "randomnumber",
+                "activityRef": "github.com/retgits/flogo-components/activity/randomnumber",
+                "attributes": [
+                  {
+                    "name": "min",
+                    "value": "0",
+                    "required": false,
+                    "type": "integer"
+                  },
+                  {
+                    "name": "max",
+                    "value": "10",
+                    "required": false,
+                    "type": "integer"
+                  }
+                ]
+              },
+              {
+                "id": "addtodate_3",
+                "name": "Add to Date",
+                "description": "Adds a specified number of units to a date",
+                "type": 1,
+                "activityType": "addtodate",
+                "activityRef": "github.com/retgits/flogo-components/activity/addtodate",
+                "attributes": [
+                  {
+                    "name": "number",
+                    "value": 0,
+                    "required": false,
+                    "type": "integer"
+                  },
+                  {
+                    "name": "units",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "date",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  }
+                ],
+                "inputMappings": [
+                  {
+                    "type": 1,
+                    "value": "$activity[randomnumber_2].result",
+                    "mapTo": "number"
+                  },
+                  {
+                    "type": 2,
+                    "value": "days",
+                    "mapTo": "units"
+                  }
+                ]
+              },
+              {
+                "id": "actreturn_4",
+                "name": "Return",
+                "description": "Simple Return Activity",
+                "type": 1,
+                "activityType": "flogo-return",
+                "activityRef": "github.com/TIBCOSoftware/flogo-contrib/activity/actreturn",
+                "attributes": [
+                  {
+                    "name": "mappings",
+                    "value": [
+                      {
+                        "mapTo": "response",
+                        "type": 4,
+                        "value": {
+                          "id": "{{$flow.invoiceid}}",
+                          "expectedDate": "{{$activity[addtodate_3].result}}"
+                        }
+                      }
+                    ],
+                    "required": false,
+                    "type": "array"
+                  }
+                ]
+              }
+            ],
+            "links": [
+              {
+                "id": 1,
+                "from": "randomnumber_2",
+                "to": "addtodate_3",
+                "type": 0
+              },
+              {
+                "id": 2,
+                "from": "addtodate_3",
+                "to": "actreturn_4",
+                "type": 0
+              }
+            ],
+            "attributes": []
+          }
+        }
+      },
+      "id": "expected_payment",
+      "metadata": {
+        "input": [
+          {
+            "name": "invoiceid",
+            "type": "string"
+          }
+        ],
+        "output": [
+          {
+            "name": "response",
+            "type": "object"
+          }
+        ]
+      },
+      "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow"
+    }
+  ]
+}

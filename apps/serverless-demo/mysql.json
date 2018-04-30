@@ -1,0 +1,193 @@
+{
+  "name": "mysqlapp",
+  "type": "flogo:app",
+  "version": "0.0.1",
+  "appModel": "1.0.0",
+  "description": "This app executes a MySQL query and returns the values to the caller",
+  "triggers": [
+    {
+      "id": "mysql_lambda_trigger",
+      "ref": "github.com/TIBCOSoftware/flogo-contrib/trigger/lambda",
+      "name": "mysql_lambda_trigger",
+      "description": "Simple Lambda Trigger",
+      "settings": {},
+      "handlers": [
+        {
+          "action": {
+            "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow",
+            "data": {
+              "flowURI": "res://flow:query"
+            },
+            "mappings": {
+              "output": [
+                {
+                  "mapTo": "data",
+                  "type": "assign",
+                  "value": "response"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "receive_http_message",
+      "ref": "github.com/TIBCOSoftware/flogo-contrib/trigger/rest",
+      "name": "Receive HTTP Message",
+      "description": "Simple REST Trigger",
+      "settings": {
+        "port": "8888"
+      },
+      "handlers": [
+        {
+          "action": {
+            "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow",
+            "data": {
+              "flowURI": "res://flow:query"
+            },
+            "mappings": {
+              "output": [
+                {
+                  "mapTo": "data",
+                  "type": "assign",
+                  "value": "response"
+                },
+                {
+                  "mapTo": "code",
+                  "type": "literal",
+                  "value": 200
+                }
+              ]
+            }
+          },
+          "settings": {
+            "method": "GET",
+            "path": "/mysql"
+          }
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "id": "flow:query",
+      "data": {
+        "name": "Query",
+        "description": "This flow executes a MySQL query",
+        "metadata": {
+          "output": [
+            {
+              "name": "response",
+              "type": "any"
+            }
+          ]
+        },
+        "tasks": [
+          {
+            "id": "log_2",
+            "name": "Start Log",
+            "description": "Simple Log Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+              "input": {
+                "message": "Start MySQL query",
+                "flowInfo": "false",
+                "addToFlow": "false"
+              }
+            }
+          },
+          {
+            "id": "mySQLFetch_3",
+            "name": "MySQL Select",
+            "description": "Reads MySQL DB",
+            "activity": {
+              "ref": "github.com/Ganitagya/flogo-contrib/activity/mysqlfetch",
+              "input": {
+                "query": "select * from customer"
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "assign",
+                    "value": "$env.DBUSER",
+                    "mapTo": "username"
+                  },
+                  {
+                    "type": "assign",
+                    "value": "$env.DBPASS",
+                    "mapTo": "password"
+                  },
+                  {
+                    "type": "assign",
+                    "value": "$env.DBHOST",
+                    "mapTo": "host"
+                  },
+                  {
+                    "type": "assign",
+                    "value": "$env.DBNAME",
+                    "mapTo": "database"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "log_4",
+            "name": "Log Message",
+            "description": "Simple Log Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+              "input": {
+                "message": null,
+                "flowInfo": "false",
+                "addToFlow": "false"
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "assign",
+                    "value": "$activity[mySQLFetch_3].result",
+                    "mapTo": "message"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "actreturn_5",
+            "name": "Return",
+            "description": "Simple Return Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/actreturn",
+              "input": {
+                "mappings": [
+                  {
+                    "mapTo": "response",
+                    "type": "assign",
+                    "value": "$activity[mySQLFetch_3].result"
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "links": [
+          {
+            "from": "log_2",
+            "to": "mySQLFetch_3"
+          },
+          {
+            "from": "mySQLFetch_3",
+            "to": "log_4"
+          },
+          {
+            "from": "log_4",
+            "to": "actreturn_5"
+          }
+        ]
+      }
+    }
+  ]
+}
+>>>>>>> f49eee3251a54fdb1b434e6def8fe2015042f140

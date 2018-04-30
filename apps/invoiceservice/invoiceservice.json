@@ -1,0 +1,377 @@
+{
+  "name": "invoiceservice",
+  "type": "flogo:app",
+  "version": "0.0.1",
+  "description": "",
+  "triggers": [
+    {
+      "name": "Receive HTTP Message",
+      "ref": "github.com/TIBCOSoftware/flogo-contrib/trigger/rest",
+      "description": "Simple REST Trigger",
+      "settings": {
+        "port": "$env.HTTPPORT"
+      },
+      "id": "receive_http_message",
+      "handlers": [
+        {
+          "settings": {
+            "method": "GET",
+            "path": "/api/invoices/:id",
+            "autoIdReply": "false",
+            "useReplyHandler": "true"
+          },
+          "actionMappings": {
+            "input": [
+              {
+                "mapTo": "id",
+                "type": 1,
+                "value": "pathParams.id"
+              }
+            ],
+            "output": [
+              {
+                "mapTo": "code",
+                "type": 2,
+                "value": 200
+              },
+              {
+                "mapTo": "data",
+                "type": 1,
+                "value": "response"
+              }
+            ]
+          },
+          "actionId": "invoice"
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "description": "",
+      "metadata": {
+        "input": [
+          {
+            "name": "id",
+            "type": "string"
+          }
+        ],
+        "output": [
+          {
+            "name": "response",
+            "type": "object"
+          }
+        ]
+      },
+      "data": {
+        "flow": {
+          "name": "Invoice",
+          "type": 1,
+          "attributes": [],
+          "rootTask": {
+            "id": "root",
+            "type": 1,
+            "tasks": [
+              {
+                "id": "log_2",
+                "name": "Log Message",
+                "description": "Simple Log Activity",
+                "type": 1,
+                "activityType": "github-com-tibco-software-flogo-contrib-activity-log",
+                "activityRef": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+                "attributes": [
+                  {
+                    "name": "message",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "flowInfo",
+                    "value": "true",
+                    "required": false,
+                    "type": "boolean"
+                  },
+                  {
+                    "name": "addToFlow",
+                    "value": "true",
+                    "required": false,
+                    "type": "boolean"
+                  }
+                ],
+                "inputMappings": [
+                  {
+                    "type": 1,
+                    "value": "$flow.id",
+                    "mapTo": "message"
+                  }
+                ]
+              },
+              {
+                "id": "randomnumber_3",
+                "name": "Random Number",
+                "description": "Creates a random number between min and max",
+                "type": 1,
+                "activityType": "github-com-retgits-flogo-components-activity-randomnumber",
+                "activityRef": "github.com/retgits/flogo-components/activity/randomnumber",
+                "attributes": [
+                  {
+                    "name": "min",
+                    "value": "1000",
+                    "required": false,
+                    "type": "integer"
+                  },
+                  {
+                    "name": "max",
+                    "value": "2000",
+                    "required": false,
+                    "type": "integer"
+                  }
+                ]
+              },
+              {
+                "id": "combine_5",
+                "name": "Combine",
+                "description": "Combines separate parts into a single string",
+                "type": 1,
+                "activityType": "github-com-jvanderl-flogo-components-activity-combine",
+                "activityRef": "github.com/jvanderl/flogo-components/activity/combine",
+                "attributes": [
+                  {
+                    "name": "delimiter",
+                    "value": null,
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "prefix",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "suffix",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "part1",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "part2",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "part3",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "part4",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "part5",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "part6",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "part7",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "part8",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  }
+                ],
+                "inputMappings": [
+                  {
+                    "type": 2,
+                    "value": "INV",
+                    "mapTo": "part1"
+                  },
+                  {
+                    "type": 1,
+                    "value": "$flow.id",
+                    "mapTo": "part2"
+                  },
+                  {
+                    "type": 2,
+                    "value": "-",
+                    "mapTo": "delimiter"
+                  }
+                ]
+              },
+              {
+                "id": "randomnumber_6",
+                "name": "Random Number (2)",
+                "description": "Creates a random number between min and max",
+                "type": 1,
+                "activityType": "github-com-retgits-flogo-components-activity-randomnumber",
+                "activityRef": "github.com/retgits/flogo-components/activity/randomnumber",
+                "attributes": [
+                  {
+                    "name": "min",
+                    "value": 0,
+                    "required": false,
+                    "type": "integer"
+                  },
+                  {
+                    "name": "max",
+                    "value": "1000",
+                    "required": false,
+                    "type": "integer"
+                  }
+                ]
+              },
+              {
+                "id": "rest_7",
+                "name": "Invoke REST Service",
+                "description": "Simple REST Activity",
+                "type": 1,
+                "activityType": "tibco-rest",
+                "activityRef": "github.com/TIBCOSoftware/flogo-contrib/activity/rest",
+                "attributes": [
+                  {
+                    "name": "method",
+                    "value": "",
+                    "required": true,
+                    "type": "string"
+                  },
+                  {
+                    "name": "uri",
+                    "value": "",
+                    "required": true,
+                    "type": "string"
+                  },
+                  {
+                    "name": "proxy",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "pathParams",
+                    "value": null,
+                    "required": false,
+                    "type": "params"
+                  },
+                  {
+                    "name": "queryParams",
+                    "value": null,
+                    "required": false,
+                    "type": "params"
+                  },
+                  {
+                    "name": "content",
+                    "value": null,
+                    "required": false,
+                    "type": "any"
+                  }
+                ],
+                "inputMappings": [
+                  {
+                    "type": 1,
+                    "value": "$env.PAYMENTSERVICE",
+                    "mapTo": "uri"
+                  },
+                  {
+                    "type": 4,
+                    "value": {
+                      "id": "{{$flow.id}}"
+                    },
+                    "mapTo": "pathParams"
+                  }
+                ]
+              },
+              {
+                "id": "actreturn_8",
+                "name": "Return",
+                "description": "Simple Return Activity",
+                "type": 1,
+                "activityType": "flogo-return",
+                "activityRef": "github.com/TIBCOSoftware/flogo-contrib/activity/actreturn",
+                "attributes": [
+                  {
+                    "name": "mappings",
+                    "value": [
+                      {
+                        "mapTo": "response",
+                        "type": 4,
+                        "value": {
+                          "id": "{{$flow.id}}",
+                          "ref": "{{$activity[combine_5].result}}",
+                          "amount": "{{$activity[randomnumber_3].result}}",
+                          "balance": "{{$activity[randomnumber_6].result}}",
+                          "expectedPaymentDate": "{{$activity[rest_7].result.expectedDate}}",
+                          "currency": "USD"
+                        }
+                      }
+                    ],
+                    "required": false,
+                    "type": "array"
+                  }
+                ]
+              }
+            ],
+            "links": [
+              {
+                "id": 1,
+                "from": "log_2",
+                "to": "randomnumber_3",
+                "type": 0
+              },
+              {
+                "id": 2,
+                "from": "randomnumber_3",
+                "to": "combine_5",
+                "type": 0
+              },
+              {
+                "id": 3,
+                "from": "combine_5",
+                "to": "randomnumber_6",
+                "type": 0
+              },
+              {
+                "id": 4,
+                "from": "randomnumber_6",
+                "to": "rest_7",
+                "type": 0
+              },
+              {
+                "id": 5,
+                "from": "rest_7",
+                "to": "actreturn_8",
+                "type": 0
+              }
+            ],
+            "attributes": []
+          }
+        }
+      },
+      "id": "invoice",
+      "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow"
+    }
+  ]
+}
