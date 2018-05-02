@@ -1,0 +1,57 @@
+{
+    "name": "amazons3",
+    "type": "flogo:activity",
+    "ref": "github.com/retgits/flogo-components/activity/amazons3",
+    "version": "0.1.0",
+    "title": "GNU Zip",
+    "description": "Activities for interacting with Amazon Simple Storage Service (S3).",
+    "author": "retgits",
+    "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/amazons3",
+    "inputs": [
+        {
+            "name": "action",
+            "type": "string",
+            "allowed": [
+                "download",
+                "upload",
+                "delete"
+            ],
+            "required": true
+        },
+        {
+            "name": "awsAccessKeyID",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "awsSecretAccessKey",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "awsRegion",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "s3BucketName",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "s3Location",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "localLocation",
+            "type": "string"
+        }
+    ],
+    "outputs": [
+        {
+            "name": "result",
+            "type": "string"
+        }
+    ]
+}
