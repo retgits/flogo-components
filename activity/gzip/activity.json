@@ -2,7 +2,7 @@
     "name": "gzip",
     "type": "flogo:activity",
     "ref": "github.com/retgits/flogo-components/activity/gzip",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "title": "GNU Zip",
     "description": "Activities for reading and writing of gzip format compressed files.",
     "author": "retgits",
@@ -14,19 +14,23 @@
             "allowed": [
                 "gzip",
                 "gunzip"
-            ]
+            ],
+            "required": true
         },
         {
             "name": "removeFile",
-            "type": "boolean"
+            "type": "boolean",
+            "required": true
         },
         {
             "name": "sourceFile",
-            "type": "string"
+            "type": "string",
+            "required": true
         },
         {
             "name": "targetDirectory",
-            "type": "string"
+            "type": "string",
+            "required": true
         }
     ],
     "outputs": [
