@@ -1,0 +1,68 @@
+{
+    "name": "amazonssm",
+    "type": "flogo:activity",
+    "ref": "github.com/retgits/flogo-components/activity/amazonssm",
+    "version": "0.1.1",
+    "title": "Amazon S3",
+    "description": "Activities for interaction with Amazon Simple Storage Manager (SSM).",
+    "author": "retgits",
+    "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/amazonssm",
+    "inputs": [
+        {
+            "name": "action",
+            "type": "string",
+            "allowed": [
+                "store",
+                "retrieve",
+                "retrieveList"
+            ],
+            "required": true
+        },
+        {
+            "name": "awsAccessKeyID",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "awsSecretAccessKey",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "awsRegion",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "parameterName",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "decryptParameter",
+            "type": "boolean"
+        },
+        {
+            "name": "parameterValue",
+            "type": "string"
+        },
+        {
+            "name": "overwriteExistingParameter",
+            "type": "boolean"
+        },
+        {
+            "name": "parameterType",
+            "type": "string",
+            "allowed": [
+                "String",
+                "SecureString"
+            ]
+        }
+    ],
+    "outputs": [
+        {
+            "name": "result",
+            "type": "any"
+        }
+    ]
+}
