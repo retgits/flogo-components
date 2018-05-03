@@ -1,6 +1,6 @@
-# Amazon SSM
+# AWS Systems Manager
 
-Activities for interacting with the parameter store of Amazon Simple Systems Manager (SSM).
+Activities for interacting with the parameter store of AWS Simple Systems Manager (SSM).
 
 
 ## Installation
