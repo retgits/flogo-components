@@ -93,10 +93,25 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 			expressionAttributes = append(expressionAttributes, ExpressionAttribute{Name: vals[i], Value: vals[i+1]})
 			i += 2
 		}
+	} else if reflect.TypeOf(dynamoDBExpressionAttributes).Kind() == reflect.Slice {
+		tempArray := dynamoDBExpressionAttributes.([]interface{})
+		for _, element := range tempArray {
+			temp := element.(map[string]interface{})
+			vals := make([]string, 0, len(temp))
+			for _, v := range temp {
+				vals = append(vals, v.(string))
+			}
+			for i := 0; i < len(vals); {
+				expressionAttributes = append(expressionAttributes, ExpressionAttribute{Name: vals[i], Value: vals[i+1]})
+				i += 2
+			}
+		}
 	} else {
 		log.Errorf("Unknown type [%s]", reflect.TypeOf(dynamoDBExpressionAttributes).String())
 		return true, fmt.Errorf("Unknown type [%s]", reflect.TypeOf(dynamoDBExpressionAttributes).String())
 	}
+
+	log.Infof("%s", expressionAttributes)
 
 	expressionAttributeMap := make(map[string]*dynamodb.AttributeValue)
 	for _, attribute := range expressionAttributes {

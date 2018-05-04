@@ -60,14 +60,29 @@ func TestEval(t *testing.T) {
 	//tc.SetInput("DynamoDBFilterExpression", "<>")
 
 	// You can pass in a string...
-	b := `[{"Name":":itemtype","Value":"user"}]`
+	//a := `[{"Name":":itemtype","Value":"user"}]`
+
+	// Or a string with multiple objects...
+	//a := `[{"Name":":itemtype","Value":"user"},{"Name":":else","Value":"user"}]`
+
+	// Or a map...
+	//a := make(map[string]interface{})
+	//a["Name"] = ":itemtype"
+	//a["Value"] = "user"
 
 	// Or an object...
-	//b := make(map[string]interface{})
-	//b["Name"] = ":itemtype"
-	//b["Value"] = "user"
+	a := make([]interface{}, 2)
+	b := make(map[string]interface{})
+	b["Name"] = ":itemtype"
+	b["Value"] = "user"
+	a[0] = b
 
-	tc.SetInput("DynamoDBExpressionAttributes", b)
+	b = make(map[string]interface{})
+	b["Name"] = ":else"
+	b["Value"] = "bla"
+	a[1] = b
+
+	tc.SetInput("DynamoDBExpressionAttributes", a)
 	act.Eval(tc)
 
 	//check result attr
