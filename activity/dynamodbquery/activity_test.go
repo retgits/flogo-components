@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"testing"
 
 	"github.com/TIBCOSoftware/flogo-contrib/action/flow/test"
@@ -50,31 +51,32 @@ func TestEval(t *testing.T) {
 	tc := test.NewTestActivityContext(getActivityMetadata())
 
 	//setup attrs
-	// To test this example, you can create a dynamodb with table name Music
-	// where the key is called Artist
-	tc.SetInput("AWSAccessKeyID", "<<>>")
-	tc.SetInput("AWSSecretAccessKey", "<<>>")
-	tc.SetInput("AWSDefaultRegion", "<<>>")
-	tc.SetInput("DynamoDBTableName", "<<>>")
+	tc.SetInput("AWSAccessKeyID", "")
+	tc.SetInput("AWSSecretAccessKey", "")
+	tc.SetInput("AWSDefaultRegion", "")
+	tc.SetInput("DynamoDBTableName", "")
 	tc.SetInput("DynamoDBKeyConditionExpression", "itemtype = :itemtype")
-	// You can comment out the FilterExpression if you don't want to use it
-	tc.SetInput("DynamoDBFilterExpression", "<>")
+	//You can comment out the FilterExpression if you don't want to use it
+	//tc.SetInput("DynamoDBFilterExpression", "<>")
 
-	payload := []ExpressionAttribute{
-		ExpressionAttribute{
-			Name:  ":itemtype",
-			Value: "user",
-		},
-	}
+	// You can pass in a string...
+	b := `[{"Name":":itemtype","Value":"user"}]`
 
-	b, _ := json.Marshal(payload)
+	// Or an object...
+	//b := make(map[string]interface{})
+	//b["Name"] = ":itemtype"
+	//b["Value"] = "user"
 
-	tc.SetInput("DynamoDBExpressionAttributes", string(b))
+	tc.SetInput("DynamoDBExpressionAttributes", b)
 	act.Eval(tc)
 
 	//check result attr
 	result := tc.GetOutput("result")
 	scannedCount := tc.GetOutput("scannedCount")
+	consumedCapacity := tc.GetOutput("consumedCapacity")
 	fmt.Printf("The ScannedCount of the query was: [%s]\n", scannedCount)
-	fmt.Printf("The Result of the query was:\n[%s]\n", result)
+	fmt.Printf("The ConsumedCapacity of the query was: [%v]\n", consumedCapacity)
+	fmt.Println("The Result of the query was:")
+	enc := json.NewEncoder(os.Stdout)
+	enc.Encode(result)
 }
