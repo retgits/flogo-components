@@ -4,6 +4,8 @@ package dynamodbquery
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
+	"reflect"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -77,9 +79,34 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 	// Create a new login to the DynamoDB service
 	dynamoService := dynamodb.New(awsSession)
 
-	// Construct the expression attributes from the JSON payload
+	// Construct the expression attributes
 	var expressionAttributes []ExpressionAttribute
-	json.Unmarshal([]byte(dynamoDBExpressionAttributes.(string)), &expressionAttributes)
+
+	v := reflect.ValueOf(dynamoDBExpressionAttributes)
+	switch v.Kind() {
+	case reflect.String:
+		json.Unmarshal([]byte(dynamoDBExpressionAttributes.(string)), &expressionAttributes)
+	case reflect.Slice:
+		fmt.Printf("slice")
+	case reflect.Map:
+		fmt.Printf("map")
+	default:
+		log.Errorf("Unknown type [%s]", reflect.TypeOf(dynamoDBExpressionAttributes).String())
+		return true, fmt.Errorf("Unknown type [%s]", reflect.TypeOf(dynamoDBExpressionAttributes).String())
+	}
+
+	// Construct the expression attributes
+	if reflect.TypeOf(dynamoDBExpressionAttributes).Kind() == reflect.Map {
+		expressionAttributes = buildExpressionAttributesArray(dynamoDBExpressionAttributes.(map[string]interface{}))
+
+	} else if reflect.TypeOf(dynamoDBExpressionAttributes).Kind() == reflect.Slice {
+		tempArray := dynamoDBExpressionAttributes.([]interface{})
+		for _, element := range tempArray {
+			expressionAttributes = append(expressionAttributes, buildExpressionAttributesArray(element.(map[string]interface{}))...)
+		}
+	}
+
+	log.Infof("%v", expressionAttributes)
 
 	expressionAttributeMap := make(map[string]*dynamodb.AttributeValue)
 	for _, attribute := range expressionAttributes {
@@ -93,6 +120,7 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 			TableName:                 aws.String(dynamoDBTableName),
 			KeyConditionExpression:    aws.String(dynamoDBKeyConditionExpression),
 			ExpressionAttributeValues: expressionAttributeMap,
+			ReturnConsumedCapacity:    aws.String("TOTAL"),
 		}
 	} else {
 		queryInput = &dynamodb.QueryInput{
@@ -100,6 +128,7 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 			KeyConditionExpression:    aws.String(dynamoDBKeyConditionExpression),
 			ExpressionAttributeValues: expressionAttributeMap,
 			FilterExpression:          aws.String(dynamoDBFilterExpression),
+			ReturnConsumedCapacity:    aws.String("TOTAL"),
 		}
 	}
 
@@ -127,7 +156,9 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 		// Set the output value in the context
 		sc := *queryOutput.ScannedCount
 		context.SetOutput(ovScannedCount, sc)
-		// TODO: Add consumed capacity
+		cc := *queryOutput.ConsumedCapacity.CapacityUnits
+		context.SetOutput(ovConsumedCapacity, cc)
+
 		// Create a JSON representation from the result
 		jsonString, _ := json.Marshal(result)
 		var resultinterface interface{}
@@ -139,4 +170,18 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 	}
 	// Complete the activity
 	return true, nil
+}
+
+func buildExpressionAttributesArray(attribs map[string]interface{}) []ExpressionAttribute {
+	var expressionAttributes []ExpressionAttribute
+	attribValues := make([]string, 0, len(attribs))
+	for _, v := range attribs {
+		log.Infof("----[%s]", v.(string))
+		attribValues = append(attribValues, v.(string))
+	}
+	for i := 0; i < len(attribValues); {
+		expressionAttributes = append(expressionAttributes, ExpressionAttribute{Name: attribValues[i], Value: attribValues[i+1]})
+		i += 2
+	}
+	return expressionAttributes
 }
