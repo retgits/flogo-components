@@ -81,37 +81,32 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 
 	// Construct the expression attributes
 	var expressionAttributes []ExpressionAttribute
-	if reflect.TypeOf(dynamoDBExpressionAttributes).Kind() == reflect.String {
+
+	v := reflect.ValueOf(dynamoDBExpressionAttributes)
+	switch v.Kind() {
+	case reflect.String:
 		json.Unmarshal([]byte(dynamoDBExpressionAttributes.(string)), &expressionAttributes)
-	} else if reflect.TypeOf(dynamoDBExpressionAttributes).Kind() == reflect.Map {
-		temp := dynamoDBExpressionAttributes.(map[string]interface{})
-		vals := make([]string, 0, len(temp))
-		for _, v := range temp {
-			vals = append(vals, v.(string))
-		}
-		for i := 0; i < len(vals); {
-			expressionAttributes = append(expressionAttributes, ExpressionAttribute{Name: vals[i], Value: vals[i+1]})
-			i += 2
-		}
-	} else if reflect.TypeOf(dynamoDBExpressionAttributes).Kind() == reflect.Slice {
-		tempArray := dynamoDBExpressionAttributes.([]interface{})
-		for _, element := range tempArray {
-			temp := element.(map[string]interface{})
-			vals := make([]string, 0, len(temp))
-			for _, v := range temp {
-				vals = append(vals, v.(string))
-			}
-			for i := 0; i < len(vals); {
-				expressionAttributes = append(expressionAttributes, ExpressionAttribute{Name: vals[i], Value: vals[i+1]})
-				i += 2
-			}
-		}
-	} else {
+	case reflect.Slice:
+		fmt.Printf("slice")
+	case reflect.Map:
+		fmt.Printf("map")
+	default:
 		log.Errorf("Unknown type [%s]", reflect.TypeOf(dynamoDBExpressionAttributes).String())
 		return true, fmt.Errorf("Unknown type [%s]", reflect.TypeOf(dynamoDBExpressionAttributes).String())
 	}
 
-	log.Infof("%s", expressionAttributes)
+	// Construct the expression attributes
+	if reflect.TypeOf(dynamoDBExpressionAttributes).Kind() == reflect.Map {
+		expressionAttributes = buildExpressionAttributesArray(dynamoDBExpressionAttributes.(map[string]interface{}))
+
+	} else if reflect.TypeOf(dynamoDBExpressionAttributes).Kind() == reflect.Slice {
+		tempArray := dynamoDBExpressionAttributes.([]interface{})
+		for _, element := range tempArray {
+			expressionAttributes = append(expressionAttributes, buildExpressionAttributesArray(element.(map[string]interface{}))...)
+		}
+	}
+
+	log.Infof("%v", expressionAttributes)
 
 	expressionAttributeMap := make(map[string]*dynamodb.AttributeValue)
 	for _, attribute := range expressionAttributes {
@@ -175,4 +170,18 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 	}
 	// Complete the activity
 	return true, nil
+}
+
+func buildExpressionAttributesArray(attribs map[string]interface{}) []ExpressionAttribute {
+	var expressionAttributes []ExpressionAttribute
+	attribValues := make([]string, 0, len(attribs))
+	for _, v := range attribs {
+		log.Infof("----[%s]", v.(string))
+		attribValues = append(attribValues, v.(string))
+	}
+	for i := 0; i < len(attribValues); {
+		expressionAttributes = append(expressionAttributes, ExpressionAttribute{Name: attribValues[i], Value: attribValues[i+1]})
+		i += 2
+	}
+	return expressionAttributes
 }

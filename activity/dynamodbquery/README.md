@@ -47,15 +47,20 @@ Inputs and Outputs:
       }
     ],
     "outputs": [
-      {
-        "name": "result",
-        "type": "any"
-      },
-      {
-        "name": "scannedCount",
-        "type": "string"
-      }
-    ]
+    {
+      "name": "result",
+      "type": "any"
+    },
+    {
+      "name": "scannedCount",
+      "type": "string"
+    },
+    {
+      "name": "consumedCapacity",
+      "type": "double"
+    }
+  ]
+}
 ```
 ## Inputs
 | Input                          | Description    |
@@ -69,7 +74,8 @@ Inputs and Outputs:
 | DynamoDBFilterExpression       | The filter expression you want to apply on the result set before it is sent back to activity |
 
 ## Ouputs
-| Output       | Description                                         |
-|:-------------|:----------------------------------------------------|
-| result       | The JSON representation of the result of your query |
-| scannedCount | The number of items evaluated                       |
+| Output           | Description                                         |
+|:-----------------|:----------------------------------------------------|
+| result           | The JSON representation of the result of your query |
+| scannedCount     | The number of items evaluated                       |
+| consumedCapacity | The number of capacity units used by the query      |
