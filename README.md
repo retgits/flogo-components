@@ -9,6 +9,7 @@ Collection custom built flogo components
 * [amazonssm](activity/amazonssm): Activities for interaction with the Paramter Store of Amazon Simple Storage Manager (SSM)
 * [dynamodbinsert](activity/dynamodbinsert): Insert a record in an Amazon DynamoDB
 * [dynamodbquery](activity/dynamodbquery): Execute a query against an Amazon DynamoDB
+* [githubissues](activity/githubissues): Get the GitHub issues for an authenticated user
 * [gzip](activity/gzip): Activities for reading and writing of gzip format compressed files
 * [randomnumber](activity/randomnumber): Generate a random unique number between the min and max value
 * [randomstring](activity/randomstring): Generate a random string consisting with the length you specify
