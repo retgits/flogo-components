@@ -6,6 +6,7 @@ Collection custom built flogo components
 ### Activities
 * [addtodate](activity/addtodate): Adds a specified number of days to either the current date or a chosen date
 * [amazons3](activity/amazons3): Activities for interacting with Amazon Simple Storage Service (S3)
+* [amazonsqssend](activity/amazonsqssend): Send a message using Amazon Simple Queue Service (SQS)
 * [amazonssm](activity/amazonssm): Activities for interaction with the Paramter Store of Amazon Simple Storage Manager (SSM)
 * [dynamodbinsert](activity/dynamodbinsert): Insert a record in an Amazon DynamoDB
 * [dynamodbquery](activity/dynamodbquery): Execute a query against an Amazon DynamoDB
