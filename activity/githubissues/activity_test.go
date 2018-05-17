@@ -12,7 +12,7 @@ import (
 
 var activityMetadata *activity.Metadata
 
-// Update these variables before testing to match your own AWS account
+// Update these variables before testing to match your own GitHub account
 const (
 	githubToken = ""
 )
@@ -65,4 +65,8 @@ func TestEvalGetIssues(t *testing.T) {
 	// Check the result
 	result := tc.GetOutput("result")
 	fmt.Printf("The result is:\n[%s]\n", result)
+
+	// The below statement can print the result as a JSON object
+	//enc := json.NewEncoder(os.Stdout)
+	//enc.Encode(result)
 }

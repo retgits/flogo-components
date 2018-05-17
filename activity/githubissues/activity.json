@@ -2,7 +2,7 @@
     "name": "githubissues",
     "type": "flogo:activity",
     "ref": "github.com/retgits/flogo-components/activity/githubissues",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "title": "GitHub Issues",
     "description": "Gets the GitHub issues assigned to the current user between now and a predefined time interval.",
     "author": "retgits",
