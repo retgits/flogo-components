@@ -64,7 +64,7 @@ func TestEvalGetIssues(t *testing.T) {
 
 	// Check the result
 	result := tc.GetOutput("result")
-	fmt.Printf("The result is:\n[%s]\n", result)
+	fmt.Printf("The result is:\n[%v]\n", result)
 
 	// The below statement can print the result as a JSON object
 	//enc := json.NewEncoder(os.Stdout)

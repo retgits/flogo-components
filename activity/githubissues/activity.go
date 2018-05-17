@@ -3,9 +3,7 @@ package githubissues
 
 // Imports
 import (
-	"bytes"
 	ctx "context"
-	"encoding/json"
 	"time"
 
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
@@ -69,19 +67,11 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 	}
 
 	log.Infof("GitHub returned %v issues", len(issues))
-	result := make([]interface{}, len(issues))
+	datamap := make([]interface{}, len(issues))
 
 	for idx, issue := range issues {
-		result[idx] = issue
+		datamap[idx] = issue
 	}
-
-	// Create a JSON representation from the result
-	jsonString, _ := json.Marshal(result)
-	var resultinterface interface{}
-	d := json.NewDecoder(bytes.NewReader(jsonString))
-	d.UseNumber()
-	err = d.Decode(&resultinterface)
-	datamap := map[string]interface{}{"results": resultinterface}
 
 	// Set the output value in the context
 	context.SetOutput(ovResult, datamap)

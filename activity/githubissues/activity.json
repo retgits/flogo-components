@@ -22,7 +22,7 @@
     "outputs": [
         {
             "name": "result",
-            "type": "any"
+            "type": "array"
         }
     ]
 }
