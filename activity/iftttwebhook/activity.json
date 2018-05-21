@@ -1,0 +1,40 @@
+{
+    "name": "iftttwebhook",
+    "type": "flogo:activity",
+    "ref": "github.com/retgits/flogo-components/activity/iftttwebhook",
+    "version": "0.1.0",
+    "title": "IFTTT",
+    "description": "Trigger a webhook in IFTTT.",
+    "author": "retgits",
+    "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/iftttwebhook",
+    "inputs": [
+        {
+            "name": "key",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "event",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "value1",
+            "type": "string"
+        },
+        {
+            "name": "value2",
+            "type": "string"
+        },
+        {
+            "name": "value3",
+            "type": "string"
+        }
+    ],
+    "outputs": [
+        {
+            "name": "result",
+            "type": "string"
+        }
+    ]
+}

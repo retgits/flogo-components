@@ -12,6 +12,7 @@ Collection custom built flogo components
 * [dynamodbquery](activity/dynamodbquery): Execute a query against an Amazon DynamoDB
 * [githubissues](activity/githubissues): Get the GitHub issues for an authenticated user
 * [gzip](activity/gzip): Activities for reading and writing of gzip format compressed files
+* [ifttt webhook](activity-iftttwebhook): Activity to send a webhook request to IFTTT
 * [randomnumber](activity/randomnumber): Generate a random unique number between the min and max value
 * [randomstring](activity/randomstring): Generate a random string consisting with the length you specify
 * [trellocard](activity/trellocard): Create a new Trello card in your account
