@@ -8,6 +8,7 @@ Collection custom built flogo components
 * [amazons3](activity/amazons3): Activities for interacting with Amazon Simple Storage Service (S3)
 * [amazonsqssend](activity/amazonsqssend): Send a message using Amazon Simple Queue Service (SQS)
 * [amazonssm](activity/amazonssm): Activities for interaction with the Paramter Store of Amazon Simple Storage Manager (SSM)
+* [downloadfile](activity/downloadfile): Downloads a file
 * [dynamodbinsert](activity/dynamodbinsert): Insert a record in an Amazon DynamoDB
 * [dynamodbquery](activity/dynamodbquery): Execute a query against an Amazon DynamoDB
 * [githubissues](activity/githubissues): Get the GitHub issues for an authenticated user
@@ -16,6 +17,7 @@ Collection custom built flogo components
 * [randomnumber](activity/randomnumber): Generate a random unique number between the min and max value
 * [randomstring](activity/randomstring): Generate a random string consisting with the length you specify
 * [trellocard](activity/trellocard): Create a new Trello card in your account
+* [writetofile](activity/writetofile): Writes the input of the activity to a file
 
 ### Apps
 * [invoiceservice](apps/invoiceservice): A simple service listening to requests on a port exposed as environment variable, sending back random data and leveraging the [paymentservice](apps/paymentservice)
