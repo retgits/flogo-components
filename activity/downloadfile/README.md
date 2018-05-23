@@ -4,11 +4,11 @@ This activity provides your Flogo app the ability to download a file
 ## Installation
 
 ```bash
-flogo install github.com/retgits/flogo-components/activity/writetofile
+flogo install github.com/retgits/flogo-components/activity/downloadfile
 ```
 Link for flogo web:
 ```
-https://github.com/retgits/flogo-components/activity/writetofile
+https://github.com/retgits/flogo-components/activity/downloadfile
 ```
 
 ## Schema
