@@ -16,6 +16,7 @@ Collection custom built flogo components
 * [ifttt webhook](activity/iftttwebhook): Activity to send a webhook request to IFTTT
 * [randomnumber](activity/randomnumber): Generate a random unique number between the min and max value
 * [randomstring](activity/randomstring): Generate a random string consisting with the length you specify
+* [tomlreader](activity/tomlreader): Reads and queries a TOML file
 * [trellocard](activity/trellocard): Create a new Trello card in your account
 * [writetofile](activity/writetofile): Writes the input of the activity to a file
 
