@@ -1,0 +1,40 @@
+{
+    "name": "downloadfile",
+    "type": "flogo:activity",
+    "ref": "github.com/retgits/flogo-components/activity/downloadfile",
+    "version": "0.1.0",
+    "title": "Download file",
+    "description": "Download a file.",
+    "author": "retgits",
+    "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/downloadfile",
+    "inputs": [
+        {
+            "name": "url",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "writeToDisk",
+            "type": "bool",
+            "required": true
+        },
+        {
+            "name": "filename",
+            "type": "string"
+        },
+        {
+            "name": "append",
+            "type": "bool"
+        },
+        {
+            "name": "create",
+            "type": "bool"
+        }
+    ],
+    "outputs": [
+        {
+            "name": "result",
+            "type": "string"
+        }
+    ]
+}
