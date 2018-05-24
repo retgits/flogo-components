@@ -118,6 +118,8 @@ func writeContentToDisk(filename string, content string, create bool, append boo
 	if append {
 		file, err = os.OpenFile(filename, os.O_APPEND|os.O_WRONLY, 0600)
 	} else {
+		deleteFile(filename)
+		createFile(filename)
 		file, err = os.OpenFile(filename, os.O_WRONLY, 0600)
 	}
 
@@ -128,6 +130,15 @@ func writeContentToDisk(filename string, content string, create bool, append boo
 	defer file.Close()
 
 	if _, err = file.WriteString(content); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func deleteFile(filename string) error {
+	var err = os.Remove(filename)
+	if err != nil {
 		return err
 	}
 

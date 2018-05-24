@@ -2,7 +2,7 @@
     "name": "downloadfile",
     "type": "flogo:activity",
     "ref": "github.com/retgits/flogo-components/activity/downloadfile",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "title": "Download file",
     "description": "Download a file.",
     "author": "retgits",
