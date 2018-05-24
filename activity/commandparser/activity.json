@@ -1,0 +1,23 @@
+{
+    "name": "commandparser",
+    "type": "flogo:activity",
+    "ref": "github.com/retgits/flogo-components/activity/commandparser",
+    "version": "0.1.0",
+    "title": "Command Parser",
+    "description": "Parses a commandline string into separate arguments.",
+    "author": "retgits",
+    "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/commandparser",
+    "inputs": [
+        {
+            "name": "commandString",
+            "type": "string",
+            "required": true
+        }
+    ],
+    "outputs": [
+        {
+            "name": "result",
+            "type": "any"
+        }
+    ]
+}
