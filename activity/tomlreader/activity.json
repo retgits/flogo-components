@@ -2,7 +2,7 @@
     "name": "tomlreader",
     "type": "flogo:activity",
     "ref": "github.com/retgits/flogo-components/activity/tomlreader",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "title": "TOML Reader",
     "description": "Reads and queries TOML files.",
     "author": "retgits",
@@ -17,6 +17,10 @@
             "name": "key",
             "type": "string",
             "required": true
+        },
+        {
+            "name": "filters",
+            "type": "string"
         }
     ],
     "outputs": [

@@ -4,6 +4,7 @@ package tomlreader
 // Imports
 import (
 	"os"
+	"strings"
 
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
@@ -14,6 +15,7 @@ import (
 const (
 	ivFilename = "filename"
 	ivKey      = "key"
+	ivFilters  = "filters"
 	ovResult   = "result"
 )
 
@@ -41,6 +43,7 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 	// Get the action
 	filename := context.GetInput(ivFilename).(string)
 	key := context.GetInput(ivKey).(string)
+	filters := context.GetInput(ivFilters).(string)
 
 	// Check if the file exists
 	_, err = os.Stat(filename)
@@ -75,8 +78,54 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 		datamap[idx] = val.ToMap()
 	}
 
+	// Filter the results
+	if len(filters) > 0 {
+		filterArray := strings.Split(filters, "/")
+		for _, filter := range filterArray {
+			if strings.HasPrefix(filter, "ValueContains") {
+				value := strings.Replace(strings.Split(filter, "(")[1], ")", "", -1)
+				datamap = mapValueContains(datamap, value)
+			} else if strings.HasPrefix(filter, "KeyEquals") {
+				params := strings.Replace(strings.Split(filter, "(")[1], ")", "", -1)
+				vals := strings.Split(params, ",")
+				datamap = mapKeyEquals(datamap, vals[0], vals[1])
+			}
+		}
+	}
+
 	// Set the output value in the context
 	context.SetOutput(ovResult, datamap)
 
 	return true, nil
+}
+
+func mapKeyEquals(datamap []interface{}, key string, value interface{}) []interface{} {
+	tempmap := make([]interface{}, 0)
+
+	for _, val := range datamap {
+		item := val.(map[string]interface{})
+		if _, ok := item[key]; ok {
+			if item[key] == value {
+				tempmap = append(tempmap, item)
+			}
+		}
+	}
+
+	return tempmap
+}
+
+func mapValueContains(datamap []interface{}, value string) []interface{} {
+	tempmap := make([]interface{}, 0)
+
+	for _, val := range datamap {
+		item := val.(map[string]interface{})
+		for k := range item {
+			if strings.Contains(item[k].(string), value) {
+				tempmap = append(tempmap, item)
+				break
+			}
+		}
+	}
+
+	return tempmap
 }

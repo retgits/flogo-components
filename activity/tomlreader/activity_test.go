@@ -113,3 +113,53 @@ func TestEvalReadMultipleItems(t *testing.T) {
 	result := tc.GetOutput("result")
 	fmt.Printf("The number of items in the result is:\n[%v]\n", len(result.([]interface{})))
 }
+
+func TestEvalReadMultipleItemsWithFilters(t *testing.T) {
+
+	defer func() {
+		if r := recover(); r != nil {
+			t.Failed()
+			t.Errorf("panic during execution: %v", r)
+		}
+	}()
+
+	act := NewActivity(getActivityMetadata())
+	tc := test.NewTestActivityContext(getActivityMetadata())
+
+	// Set required attributes
+	tc.SetInput("filename", filename)
+	tc.SetInput("key", "items")
+	tc.SetInput("filters", "ValueContains(retgits)")
+
+	// Execute the activity
+	act.Eval(tc)
+
+	// Check the result
+	result := tc.GetOutput("result")
+	fmt.Printf("The number of items in the result is:\n[%v]\n", len(result.([]interface{})))
+}
+
+func TestEvalReadMultipleItemsWithMultipleFilters(t *testing.T) {
+
+	defer func() {
+		if r := recover(); r != nil {
+			t.Failed()
+			t.Errorf("panic during execution: %v", r)
+		}
+	}()
+
+	act := NewActivity(getActivityMetadata())
+	tc := test.NewTestActivityContext(getActivityMetadata())
+
+	// Set required attributes
+	tc.SetInput("filename", filename)
+	tc.SetInput("key", "items")
+	tc.SetInput("filters", "ValueContains(retgits)/KeyEquals(type,activity)")
+
+	// Execute the activity
+	act.Eval(tc)
+
+	// Check the result
+	result := tc.GetOutput("result")
+	fmt.Printf("The number of items in the result is:\n[%v]\n", len(result.([]interface{})))
+}
