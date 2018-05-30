@@ -131,6 +131,10 @@ func newActionHandler(rt *RestTrigger, handler *trigger.Handler) httprouter.Hand
 			pathParams[param.Key] = param.Value
 		}
 
+		typeSetting, typeBool := handler.GetSetting("type")
+		log.Infof("typeSetting '%s'", typeSetting)
+		log.Infof("typeBool '%v'", typeBool)
+
 		buf := new(bytes.Buffer)
 		buf.ReadFrom(r.Body)
 		s := buf.String()
