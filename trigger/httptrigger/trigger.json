@@ -3,7 +3,7 @@
     "type": "flogo:trigger",
     "ref": "github.com/retgits/flogo-components/trigger/httptrigger",
     "version": "0.0.1",
-    "title": "Receive HTTP Message",
+    "title": "HTTP Message Starter",
     "description": "Simple HTTP Trigger",
     "author": "retgits",
     "homepage": "https://github.com/retgits/flogo-components/tree/master/trigger/httptrigger",
