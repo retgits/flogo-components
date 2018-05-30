@@ -58,12 +58,6 @@
           "name": "path",
           "type": "string",
           "required" : true
-        },
-        {
-          "name": "type",
-          "type": "string",
-          "required" : true,
-          "allowed" : ["FORM", "JSON"]
         }
       ]
     }

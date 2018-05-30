@@ -2,8 +2,6 @@
 
 This trigger provides your flogo application the ability to start a flow via HTTP
 
-_If your input is a JSON object you might want to use the [REST trigger](https://github.com/TIBCOSoftware/flogo-contrib/tree/master/trigger/rest). This trigger is specifically for cases where you receive form data (like `fizz=buzz`)_
-
 ## Installation
 ```bash
 flogo install github.com/retgits/flogo-components/trigger/httptrigger
