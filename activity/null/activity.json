@@ -1,0 +1,12 @@
+{
+    "name": "null",
+    "type": "flogo:activity",
+    "ref": "github.com/retgits/flogo-components/activity/null",
+    "version": "0.1.0",
+    "title": "Null",
+    "description": "An activity that does nothing.",
+    "author": "retgits",
+    "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/null",
+    "inputs": [],
+    "outputs": []
+}
