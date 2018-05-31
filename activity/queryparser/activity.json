@@ -1,0 +1,23 @@
+{
+    "name": "queryparser",
+    "type": "flogo:activity",
+    "ref": "github.com/retgits/flogo-components/activity/queryparser",
+    "version": "0.1.0",
+    "title": "Query Parser",
+    "description": "Parses a query string into name/value pairs.",
+    "author": "retgits",
+    "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/queryparser",
+    "inputs": [
+        {
+            "name": "query",
+            "type": "string",
+            "required": true
+        }
+    ],
+    "outputs": [
+        {
+            "name": "result",
+            "type": "any"
+        }
+    ]
+}
