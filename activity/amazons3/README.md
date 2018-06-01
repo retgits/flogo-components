@@ -71,8 +71,8 @@ Inputs and Outputs:
 | Input              | Description    |
 |:-------------------|:---------------|
 | action             | The action you want to take, either `download`, `upload`, or `delete` |
-| awsAccessKeyID     | Your AWS Access Key |
-| awsSecretAccessKey | Your AWS Secret Key (keep this secret!) |
+| awsAccessKeyID     | Your AWS Access Key (only needed if you don't give your Lambda function rights to invoke S3 reads and puts) |
+| awsSecretAccessKey | Your AWS Secret Key (only needed if you don't give your Lambda function rights to invoke S3 reads and puts) |
 | awsRegion          | The AWS region your S3 bucket is in |
 | s3BucketName       | The name of your S3 bucket |
 | s3Location         | The file location on S3, this should be a full path (like `/bla/temp.txt`) |

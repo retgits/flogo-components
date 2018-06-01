@@ -2,7 +2,7 @@
     "name": "amazons3",
     "type": "flogo:activity",
     "ref": "github.com/retgits/flogo-components/activity/amazons3",
-    "version": "0.1.1",
+    "version": "0.2.0",
     "title": "Amazon S3",
     "description": "Activities for interacting with Amazon Simple Storage Service (S3).",
     "author": "retgits",
@@ -21,12 +21,12 @@
         {
             "name": "awsAccessKeyID",
             "type": "string",
-            "required": true
+            "required": false
         },
         {
             "name": "awsSecretAccessKey",
             "type": "string",
-            "required": true
+            "required": false
         },
         {
             "name": "awsRegion",

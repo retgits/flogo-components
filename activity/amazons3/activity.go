@@ -48,22 +48,38 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 
 	// Get the action
 	action := context.GetInput(ivAction).(string)
-	awsAccessKeyID := context.GetInput(ivAwsAccessKeyID).(string)
-	awsSecretAccessKey := context.GetInput(ivAwsSecretAccessKey).(string)
 	awsRegion := context.GetInput(ivAwsRegion).(string)
 	s3BucketName := context.GetInput(ivS3BucketName).(string)
 	// localLocation is a file when uploading a file or a directory when downloading a file
 	localLocation := context.GetInput(ivLocalLocation).(string)
 	s3Location := context.GetInput(ivS3Location).(string)
 
-	// Create new credentials using the accessKey and secretKey
-	awsCredentials := credentials.NewStaticCredentials(awsAccessKeyID, awsSecretAccessKey, "")
+	// AWS Credentials, only if needed
+	var awsAccessKeyID, awsSecretAccessKey = "", ""
+	if context.GetInput(ivAwsAccessKeyID) != nil {
+		awsAccessKeyID = context.GetInput(ivAwsAccessKeyID).(string)
+	}
+	if context.GetInput(ivAwsSecretAccessKey) != nil {
+		awsSecretAccessKey = context.GetInput(ivAwsSecretAccessKey).(string)
+	}
 
-	// Create a new session to AWS
-	awsSession := session.Must(session.NewSession(&aws.Config{
-		Credentials: awsCredentials,
-		Region:      aws.String(awsRegion),
-	}))
+	// Create a session with Credentials only if they are set
+	var awsSession *session.Session
+	if awsAccessKeyID != "" && awsSecretAccessKey != "" {
+		// Create new credentials using the accessKey and secretKey
+		awsCredentials := credentials.NewStaticCredentials(awsAccessKeyID, awsSecretAccessKey, "")
+
+		// Create a new session with AWS credentials
+		awsSession = session.Must(session.NewSession(&aws.Config{
+			Credentials: awsCredentials,
+			Region:      aws.String(awsRegion),
+		}))
+	} else {
+		// Create a new session without AWS credentials
+		awsSession = session.Must(session.NewSession(&aws.Config{
+			Region: aws.String(awsRegion),
+		}))
+	}
 
 	// See which action needs to be taken
 	switch action {
