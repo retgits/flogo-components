@@ -1,4 +1,4 @@
-// Package dynamodbquery executes a query against an Amazon DynamoDB
+// Package dynamodbquery queries objects from Amazon DynamoDB
 package dynamodbquery
 
 import (
@@ -18,13 +18,13 @@ import (
 
 // Constants used by the code to represent the input and outputs of the JSON structure
 const (
-	ivAWSAccessKeyID                 = "AWSAccessKeyID"
-	ivAWSSecretAccessKey             = "AWSSecretAccessKey"
-	ivAWSDefaultRegion               = "AWSDefaultRegion"
-	ivDynamoDBTableName              = "DynamoDBTableName"
-	ivDynamoDBKeyConditionExpression = "DynamoDBKeyConditionExpression"
-	ivDynamoDBExpressionAttributes   = "DynamoDBExpressionAttributes"
-	ivDynamoDBFilterExpression       = "DynamoDBFilterExpression"
+	ivAwsAccessKeyID                 = "awsAccessKeyID"
+	ivAwsSecretAccessKey             = "awsSecretAccessKey"
+	ivAwsRegion                      = "awsRegion"
+	ivDynamoDBTableName              = "dynamoDBTableName"
+	ivDynamoDBKeyConditionExpression = "dynamoDBKeyConditionExpression"
+	ivDynamoDBExpressionAttributes   = "dynamoDBExpressionAttributes"
+	ivDynamoDBFilterExpression       = "dynamoDBFilterExpression"
 
 	ovResult           = "result"
 	ovScannedCount     = "scannedCount"
@@ -59,22 +59,38 @@ type ExpressionAttribute struct {
 func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 
 	// Get the inputs
-	awsAccessKeyID := context.GetInput(ivAWSAccessKeyID).(string)
-	awsSecretAccessKey := context.GetInput(ivAWSSecretAccessKey).(string)
-	awsDefaultRegion := context.GetInput(ivAWSDefaultRegion).(string)
+	awsRegion := context.GetInput(ivAwsRegion).(string)
 	dynamoDBTableName := context.GetInput(ivDynamoDBTableName).(string)
 	dynamoDBKeyConditionExpression := context.GetInput(ivDynamoDBKeyConditionExpression).(string)
 	dynamoDBExpressionAttributes := context.GetInput(ivDynamoDBExpressionAttributes)
 	dynamoDBFilterExpression := context.GetInput(ivDynamoDBFilterExpression).(string)
 
-	// Create new credentials using the accessKey and secretKey
-	awsCredentials := credentials.NewStaticCredentials(awsAccessKeyID, awsSecretAccessKey, "")
+	// AWS Credentials, only if needed
+	var awsAccessKeyID, awsSecretAccessKey = "", ""
+	if context.GetInput(ivAwsAccessKeyID) != nil {
+		awsAccessKeyID = context.GetInput(ivAwsAccessKeyID).(string)
+	}
+	if context.GetInput(ivAwsSecretAccessKey) != nil {
+		awsSecretAccessKey = context.GetInput(ivAwsSecretAccessKey).(string)
+	}
 
-	// Create a new session to AWS
-	awsSession := session.Must(session.NewSession(&aws.Config{
-		Credentials: awsCredentials,
-		Region:      aws.String(awsDefaultRegion),
-	}))
+	// Create a session with Credentials only if they are set
+	var awsSession *session.Session
+	if awsAccessKeyID != "" && awsSecretAccessKey != "" {
+		// Create new credentials using the accessKey and secretKey
+		awsCredentials := credentials.NewStaticCredentials(awsAccessKeyID, awsSecretAccessKey, "")
+
+		// Create a new session with AWS credentials
+		awsSession = session.Must(session.NewSession(&aws.Config{
+			Credentials: awsCredentials,
+			Region:      aws.String(awsRegion),
+		}))
+	} else {
+		// Create a new session without AWS credentials
+		awsSession = session.Must(session.NewSession(&aws.Config{
+			Region: aws.String(awsRegion),
+		}))
+	}
 
 	// Create a new login to the DynamoDB service
 	dynamoService := dynamodb.New(awsSession)

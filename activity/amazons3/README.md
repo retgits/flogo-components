@@ -1,6 +1,6 @@
 # Amazon S3
 
-Activities for interacting with Amazon Simple Storage Service (S3).
+Upload or Download files from Amazon Simple Storage Service (S3)
 
 
 ## Installation

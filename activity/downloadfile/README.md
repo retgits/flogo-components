@@ -1,5 +1,6 @@
 # Download File
-This activity provides your Flogo app the ability to download a file
+
+Download a file
 
 ## Installation
 

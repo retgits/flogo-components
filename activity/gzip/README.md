@@ -1,7 +1,6 @@
 # GNU Zip
 
-Activities for reading and writing of gzip format compressed files.
-
+Read and write gzip format compressed files
 
 ## Installation
 

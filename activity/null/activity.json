@@ -4,7 +4,7 @@
     "ref": "github.com/retgits/flogo-components/activity/null",
     "version": "0.1.0",
     "title": "Null",
-    "description": "An activity that does nothing.",
+    "description": "An activity that does nothing (useful for branching out right after the trigger)",
     "author": "retgits",
     "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/null",
     "inputs": [],

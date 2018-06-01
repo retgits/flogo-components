@@ -1,12 +1,12 @@
 {
     "name": "amazonssm",
     "type": "flogo:activity",
-    "ref": "github.com/retgits/flogo-components/activity/amazonssm",
-    "version": "0.1.2",
-    "title": "Amazon SSM",
-    "description": "Activities for interaction with Amazon Simple Storage Manager (SSM).",
+    "ref": "github.com/retgits/flogo-components/activity/awsssm",
+    "version": "0.2.0",
+    "title": "AWS SSM",
+    "description": "Store and Retrieve parameters from the Parameter Store in Amazon Simple Systems Manager (SSM)",
     "author": "retgits",
-    "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/amazonssm",
+    "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/awsssm",
     "inputs": [
         {
             "name": "action",
@@ -21,12 +21,12 @@
         {
             "name": "awsAccessKeyID",
             "type": "string",
-            "required": true
+            "required": false
         },
         {
             "name": "awsSecretAccessKey",
             "type": "string",
-            "required": true
+            "required": false
         },
         {
             "name": "awsRegion",

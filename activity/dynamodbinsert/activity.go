@@ -1,4 +1,4 @@
-// Package dynamodbinsert inserts a record in an Amazon DynamoDB
+// Package dynamodbinsert inserts an object into Amazon DynamoDB
 package dynamodbinsert
 
 import (
@@ -15,11 +15,11 @@ import (
 
 // Constants used by the code to represent the input and outputs of the JSON structure
 const (
-	ivAWSAccessKeyID     = "AWSAccessKeyID"
-	ivAWSSecretAccessKey = "AWSSecretAccessKey"
-	ivAWSDefaultRegion   = "AWSDefaultRegion"
-	ivDynamoDBTableName  = "DynamoDBTableName"
-	ivDynamoDBRecord     = "DynamoDBRecord"
+	ivAwsAccessKeyID     = "awsAccessKeyID"
+	ivAwsSecretAccessKey = "awsSecretAccessKey"
+	ivAwsRegion          = "awsDefaultRegion"
+	ivDynamoDBTableName  = "dynamoDBTableName"
+	ivDynamoDBRecord     = "dynamoDBRecord"
 
 	ovResult = "result"
 )
@@ -52,20 +52,36 @@ type RecordAttribute struct {
 func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 
 	// Get the inputs
-	awsAccessKeyID := context.GetInput(ivAWSAccessKeyID).(string)
-	awsSecretAccessKey := context.GetInput(ivAWSSecretAccessKey).(string)
-	awsDefaultRegion := context.GetInput(ivAWSDefaultRegion).(string)
+	awsRegion := context.GetInput(ivAwsRegion).(string)
 	dynamoDBTableName := context.GetInput(ivDynamoDBTableName).(string)
 	dynamoDBRecord := context.GetInput(ivDynamoDBRecord)
 
-	// Create new credentials using the accessKey and secretKey
-	awsCredentials := credentials.NewStaticCredentials(awsAccessKeyID, awsSecretAccessKey, "")
+	// AWS Credentials, only if needed
+	var awsAccessKeyID, awsSecretAccessKey = "", ""
+	if context.GetInput(ivAwsAccessKeyID) != nil {
+		awsAccessKeyID = context.GetInput(ivAwsAccessKeyID).(string)
+	}
+	if context.GetInput(ivAwsSecretAccessKey) != nil {
+		awsSecretAccessKey = context.GetInput(ivAwsSecretAccessKey).(string)
+	}
 
-	// Create a new session to AWS
-	awsSession := session.Must(session.NewSession(&aws.Config{
-		Credentials: awsCredentials,
-		Region:      aws.String(awsDefaultRegion),
-	}))
+	// Create a session with Credentials only if they are set
+	var awsSession *session.Session
+	if awsAccessKeyID != "" && awsSecretAccessKey != "" {
+		// Create new credentials using the accessKey and secretKey
+		awsCredentials := credentials.NewStaticCredentials(awsAccessKeyID, awsSecretAccessKey, "")
+
+		// Create a new session with AWS credentials
+		awsSession = session.Must(session.NewSession(&aws.Config{
+			Credentials: awsCredentials,
+			Region:      aws.String(awsRegion),
+		}))
+	} else {
+		// Create a new session without AWS credentials
+		awsSession = session.Must(session.NewSession(&aws.Config{
+			Region: aws.String(awsRegion),
+		}))
+	}
 
 	// Create a new login to the DynamoDB service
 	dynamoService := dynamodb.New(awsSession)

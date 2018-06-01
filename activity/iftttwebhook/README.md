@@ -1,5 +1,6 @@
 # IFTTT WebHook
-This activity provides your Flogo app the ability to trigger an IFTTT WebHook and use the full library of IFTTT to do cool things!
+
+Send webhook requests to IFTTT
 
 ## Installation
 

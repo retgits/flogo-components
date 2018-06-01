@@ -1,6 +1,6 @@
 # Send SQS Message
-This activity provides your Flogo app the ability to send a message over Amazon SQS
 
+Send a message using Amazon Simple Queue Service (SQS)
 
 ## Installation
 
@@ -19,27 +19,27 @@ Inputs and Outputs:
 {
     "inputs": [
         {
-            "name": "AWSAccessKeyID",
+            "name": "awsAccessKeyID",
+            "type": "string",
+            "required": false
+        },
+        {
+            "name": "awsSecretAccessKey",
+            "type": "string",
+            "required": false
+        },
+        {
+            "name": "awsRegion",
             "type": "string",
             "required": true
         },
         {
-            "name": "AWSSecretAccessKey",
+            "name": "queueUrl",
             "type": "string",
             "required": true
         },
         {
-            "name": "AWSDefaultRegion",
-            "type": "string",
-            "required": true
-        },
-        {
-            "name": "QueueUrl",
-            "type": "string",
-            "required": true
-        },
-        {
-            "name": "MessageBody",
+            "name": "messageBody",
             "type": "string",
             "required": true
         }
@@ -53,13 +53,13 @@ Inputs and Outputs:
 }
 ```
 ## Inputs
-| Input              | Description                              |
-|:-------------------|:-----------------------------------------|
-| AWSAccessKeyID     | Your AWS Access Key                      |
-| AWSSecretAccessKey | Your AWS Secret Key (keep this secret!)  |
-| AWSDefaultRegion   | The region your queue is in              |
-| QueueUrl           | The URL of your SQS queue                |
-| MessageBody        | The body of the message you want to send |
+| Input              | Description                                                                                                 |
+|:-------------------|:------------------------------------------------------------------------------------------------------------|
+| awsAccessKeyID     | Your AWS Access Key (only needed if you don't give your Lambda function rights to interact with Amazon SQS) |
+| awsSecretAccessKey | Your AWS Secret Key (only needed if you don't give your Lambda function rights to interact with Amazon SQS) |
+| awsRegion          | The region your queue is in                                                                                 |
+| queueUrl           | The URL of your SQS queue                                                                                   |
+| messageBody        | The body of the message you want to send                                                                    |
 
 
 ## Ouputs

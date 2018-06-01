@@ -1,5 +1,6 @@
 # Write to File
-This activity provides your Flogo app the ability to write content to a file
+
+Write to a file
 
 ## Installation
 

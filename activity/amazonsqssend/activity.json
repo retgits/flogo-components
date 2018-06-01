@@ -2,34 +2,34 @@
     "name": "amazonsqssend",
     "type": "flogo:activity",
     "ref": "github.com/retgits/flogo-components/activity/amazonsqssend",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "title": "Amazon SQS",
     "description": "Send a message using Amazon Simple Queue Service (SQS)",
     "author": "retgits",
     "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/amazonsqssend",
     "inputs": [
         {
-            "name": "AWSAccessKeyID",
+            "name": "awsAccessKeyID",
+            "type": "string",
+            "required": false
+        },
+        {
+            "name": "awsSecretAccessKey",
+            "type": "string",
+            "required": false
+        },
+        {
+            "name": "awsRegion",
             "type": "string",
             "required": true
         },
         {
-            "name": "AWSSecretAccessKey",
+            "name": "queueUrl",
             "type": "string",
             "required": true
         },
         {
-            "name": "AWSDefaultRegion",
-            "type": "string",
-            "required": true
-        },
-        {
-            "name": "QueueUrl",
-            "type": "string",
-            "required": true
-        },
-        {
-            "name": "MessageBody",
+            "name": "messageBody",
             "type": "string",
             "required": true
         }

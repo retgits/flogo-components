@@ -4,7 +4,7 @@
     "ref": "github.com/retgits/flogo-components/activity/amazons3",
     "version": "0.2.0",
     "title": "Amazon S3",
-    "description": "Activities for interacting with Amazon Simple Storage Service (S3).",
+    "description": "Upload or Download files from Amazon Simple Storage Service (S3)",
     "author": "retgits",
     "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/amazons3",
     "inputs": [

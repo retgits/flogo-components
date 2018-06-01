@@ -1,5 +1,6 @@
 # DynamoDB Insert
-This activity provides your Flogo app the ability to insert a record in an Amazon DynamoDB
+
+Insert an object into Amazon DynamoDB
 
 ## Installation
 
@@ -17,15 +18,15 @@ Inputs and Outputs:
 ```json
 "inputs":[
       {
-        "name": "AWSAccessKeyID",
+        "name": "awsAccessKeyID",
         "type": "string"
       },
       {
-        "name": "AWSSecretAccessKey",
+        "name": "awsSecretAccessKey",
         "type": "string"
       },
       {
-        "name": "AWSDefaultRegion",
+        "name": "awsRegion",
         "type": "string"
       },
       {
@@ -47,8 +48,8 @@ Inputs and Outputs:
 ## Inputs
 | Input                          | Description    |
 |:-------------------------------|:---------------|
-| AWSAccessKeyID                 | Your AWS Access Key                       |
-| AWSSecretAccessKey             | Your AWS Secret Key (keep this secret!)   |
+| AWSAccessKeyID                 | Your AWS Access Key (only needed if you don't give your Lambda function rights to interact with Amazon DyanmoDB) |
+| AWSSecretAccessKey             | Your AWS Secret Key (only needed if you don't give your Lambda function rights to interact with Amazon DyanmoDB) |
 | AWSDefaultRegion               | The AWS region you're running DynamoDB in |
 | DynamoDBTableName              | The name of your DynamoDB table           |
 | DynamoDBRecord                 | A JSON array representation of your record attributes you want to add. They are name/value pairs so adding an Artist with name Leon would be `[{"Name":"Artist", "Value":"Leon"}]`. |  

@@ -13,11 +13,11 @@ import (
 
 // Constants used by the code to represent the input and outputs of the JSON structure
 const (
-	ivAWSAccessKeyID     = "AWSAccessKeyID"
-	ivAWSSecretAccessKey = "AWSSecretAccessKey"
-	ivAWSDefaultRegion   = "AWSDefaultRegion"
-	ivQueueURL           = "QueueUrl"
-	ivMessageBody        = "MessageBody"
+	ivAwsAccessKeyID     = "awsAccessKeyID"
+	ivAwsSecretAccessKey = "awsSecretAccessKey"
+	ivAwsRegion          = "awsRegion"
+	ivQueueURL           = "queueUrl"
+	ivMessageBody        = "messageBody"
 	ovResult             = "result"
 )
 
@@ -49,20 +49,36 @@ type ExpressionAttribute struct {
 func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 
 	// Get the inputs
-	awsAccessKeyID := context.GetInput(ivAWSAccessKeyID).(string)
-	awsSecretAccessKey := context.GetInput(ivAWSSecretAccessKey).(string)
-	awsDefaultRegion := context.GetInput(ivAWSDefaultRegion).(string)
+	awsRegion := context.GetInput(ivAwsRegion).(string)
 	queueURL := context.GetInput(ivQueueURL).(string)
 	messageBody := context.GetInput(ivMessageBody).(string)
 
-	// Create new credentials using the accessKey and secretKey
-	awsCredentials := credentials.NewStaticCredentials(awsAccessKeyID, awsSecretAccessKey, "")
+	// AWS Credentials, only if needed
+	var awsAccessKeyID, awsSecretAccessKey = "", ""
+	if context.GetInput(ivAwsAccessKeyID) != nil {
+		awsAccessKeyID = context.GetInput(ivAwsAccessKeyID).(string)
+	}
+	if context.GetInput(ivAwsSecretAccessKey) != nil {
+		awsSecretAccessKey = context.GetInput(ivAwsSecretAccessKey).(string)
+	}
 
-	// Create a new session to AWS
-	awsSession := session.Must(session.NewSession(&aws.Config{
-		Credentials: awsCredentials,
-		Region:      aws.String(awsDefaultRegion),
-	}))
+	// Create a session with Credentials only if they are set
+	var awsSession *session.Session
+	if awsAccessKeyID != "" && awsSecretAccessKey != "" {
+		// Create new credentials using the accessKey and secretKey
+		awsCredentials := credentials.NewStaticCredentials(awsAccessKeyID, awsSecretAccessKey, "")
+
+		// Create a new session with AWS credentials
+		awsSession = session.Must(session.NewSession(&aws.Config{
+			Credentials: awsCredentials,
+			Region:      aws.String(awsRegion),
+		}))
+	} else {
+		// Create a new session without AWS credentials
+		awsSession = session.Must(session.NewSession(&aws.Config{
+			Region: aws.String(awsRegion),
+		}))
+	}
 
 	// Create a new login to the SQS service
 	sqsService := sqs.New(awsSession)

@@ -4,7 +4,7 @@
     "ref": "github.com/retgits/flogo-components/activity/iftttwebhook",
     "version": "0.1.0",
     "title": "IFTTT",
-    "description": "Trigger a webhook in IFTTT.",
+    "description": "Send webhook requests to IFTTT",
     "author": "retgits",
     "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/iftttwebhook",
     "inputs": [

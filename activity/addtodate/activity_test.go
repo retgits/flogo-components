@@ -1,3 +1,4 @@
+// Package addtodate adds a specified number of units to a date.
 package addtodate
 
 import (

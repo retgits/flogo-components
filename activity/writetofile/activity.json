@@ -4,7 +4,7 @@
     "ref": "github.com/retgits/flogo-components/activity/writetofile",
     "version": "0.1.0",
     "title": "Write file",
-    "description": "Writes the input to a file.",
+    "description": "Write to a file",
     "author": "retgits",
     "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/writetofile",
     "inputs": [

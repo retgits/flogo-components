@@ -1,5 +1,6 @@
 # GitHub Issues
-This activity provides your Flogo app the ability to get the GitHub issues for a specific account
+
+Get the GitHub issues assigned to an authenticated user
 
 ## Installation
 

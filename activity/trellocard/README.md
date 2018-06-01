@@ -1,5 +1,6 @@
 # Trello Card
-This activity provides your Flogo app the ability to create a Trello card
+
+Create a new Trello card
 
 ## Installation
 

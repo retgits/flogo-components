@@ -4,7 +4,7 @@
     "ref": "github.com/retgits/flogo-components/activity/trellocard",
     "version": "0.1.0",
     "title": "Trello Cards",
-    "description": "Activities to create Trello cards.",
+    "description": "Create a new Trello card",
     "author": "retgits",
     "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/trellocard",
     "inputs": [

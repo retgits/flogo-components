@@ -1,3 +1,4 @@
+// Package dynamodbinsert inserts an object into Amazon DynamoDB
 package dynamodbinsert
 
 import (

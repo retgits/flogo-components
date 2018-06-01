@@ -1,16 +1,16 @@
 # AWS Systems Manager
 
-Activities for interacting with the parameter store of AWS Simple Systems Manager (SSM).
+Store and Retrieve parameters from the Parameter Store in Amazon Simple Systems Manager (SSM)
 
 
 ## Installation
 
 ```bash
-flogo install github.com/retgits/flogo-components/activity/amazonssm
+flogo install github.com/retgits/flogo-components/activity/awsssm
 ```
 Link for flogo web:
 ```
-https://github.com/retgits/flogo-components/activity/amazonssm
+https://github.com/retgits/flogo-components/activity/awsssm
 ```
 
 ## Schema
@@ -82,8 +82,8 @@ Inputs and Outputs:
 | Input                      | Description    |
 |:---------------------------|:---------------|
 | action                     | The action you want to take, either `store` (create a new parameter), `retrieve` (get a single parameter), or `retrieveList` (get multiple parameters) |
-| awsAccessKeyID             | Your AWS Access Key |
-| awsSecretAccessKey         | Your AWS Secret Key (keep this secret!) |
+| awsAccessKeyID             | Your AWS Access Key (only needed if you don't give your Lambda function rights to interact with AWS SSM) |
+| awsSecretAccessKey         | Your AWS Secret Key (only needed if you don't give your Lambda function rights to interact with AWS SSM) |
 | parameterName              | The name of the parameter when the action is `store` or `retrieve` (like `param1`), or a comma separated list of parameters when the action is `retrieveList` (like `param1,param2`) |
 | decryptParameter           | Describes whether the parameter should be decrypted if the action is `retrieve` or `retrieveList` |
 | parameterValue             | The value of the parameter if the action is `store` (like `myAwesomeValue`) |

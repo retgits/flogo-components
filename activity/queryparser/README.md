@@ -1,6 +1,6 @@
 # Query Parser
 
-Parses a query string into name/value pairs.
+Parse a query string into name/value pairs
 
 
 ## Installation

@@ -1,5 +1,6 @@
 /*
-Package dynamodbquery executes a query against an Amazon DynamoDB
+Package dynamodbquery queries objects from Amazon DynamoDB
+
 
 To be able to test this package you'll need to have access to Amazon DynamoDB. A sample table could be a table with the
 name *data* and with *itemtype* as the partition key, and *itemid* as the sort key (both could be strings). Some sample
