@@ -2,6 +2,8 @@
 package dynamodbinsert
 
 import (
+	"encoding/json"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -86,8 +88,7 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 
 	// Construct the expression attributes from the JSON payload
 	var recordAttributes []RecordAttribute
-	//json.Unmarshal([]byte(dynamoDBRecord.(string)), &recordAttributes)
-	recordAttributes = dynamoDBRecord.([]RecordAttribute)
+	json.Unmarshal([]byte(dynamoDBRecord.(string)), &recordAttributes)
 
 	recordAttributeMap := make(map[string]*dynamodb.AttributeValue)
 	for _, attribute := range recordAttributes {
