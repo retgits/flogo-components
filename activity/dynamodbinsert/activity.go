@@ -2,8 +2,6 @@
 package dynamodbinsert
 
 import (
-	"encoding/json"
-
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -17,9 +15,9 @@ import (
 const (
 	ivAwsAccessKeyID     = "awsAccessKeyID"
 	ivAwsSecretAccessKey = "awsSecretAccessKey"
-	ivAwsRegion          = "awsDefaultRegion"
-	ivDynamoDBTableName  = "dynamoDBTableName"
-	ivDynamoDBRecord     = "dynamoDBRecord"
+	ivAwsRegion          = "awsRegion"
+	ivDynamoDBTableName  = "DynamoDBTableName"
+	ivDynamoDBRecord     = "DynamoDBRecord"
 
 	ovResult = "result"
 )
@@ -88,7 +86,8 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 
 	// Construct the expression attributes from the JSON payload
 	var recordAttributes []RecordAttribute
-	json.Unmarshal([]byte(dynamoDBRecord.(string)), &recordAttributes)
+	//json.Unmarshal([]byte(dynamoDBRecord.(string)), &recordAttributes)
+	recordAttributes = dynamoDBRecord.([]RecordAttribute)
 
 	recordAttributeMap := make(map[string]*dynamodb.AttributeValue)
 	for _, attribute := range recordAttributes {
@@ -104,7 +103,8 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 	// Put the item in DynamoDB
 	_, err1 := dynamoService.PutItem(input)
 	if err1 != nil {
-		log.Errorf("Error while executing query [%s]", err)
+		log.Errorf("Error while executing query [%s]", err1)
+		context.SetOutput(ovResult, "ERROR")
 	} else {
 		context.SetOutput(ovResult, "Added record to DynamoDB")
 	}
