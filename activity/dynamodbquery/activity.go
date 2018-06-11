@@ -25,6 +25,7 @@ const (
 	ivDynamoDBKeyConditionExpression = "dynamoDBKeyConditionExpression"
 	ivDynamoDBExpressionAttributes   = "dynamoDBExpressionAttributes"
 	ivDynamoDBFilterExpression       = "dynamoDBFilterExpression"
+	ivDynamoDBIndexName              = "dynamoDBIndexName"
 
 	ovResult           = "result"
 	ovScannedCount     = "scannedCount"
@@ -64,6 +65,7 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 	dynamoDBKeyConditionExpression := context.GetInput(ivDynamoDBKeyConditionExpression).(string)
 	dynamoDBExpressionAttributes := context.GetInput(ivDynamoDBExpressionAttributes)
 	dynamoDBFilterExpression := context.GetInput(ivDynamoDBFilterExpression).(string)
+	dynamoDBIndexName := context.GetInput(ivDynamoDBIndexName).(string)
 
 	// AWS Credentials, only if needed
 	var awsAccessKeyID, awsSecretAccessKey = "", ""
@@ -132,19 +134,40 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 	// Construct the DynamoDB query
 	var queryInput = &dynamodb.QueryInput{}
 	if dynamoDBFilterExpression == "" {
-		queryInput = &dynamodb.QueryInput{
-			TableName:                 aws.String(dynamoDBTableName),
-			KeyConditionExpression:    aws.String(dynamoDBKeyConditionExpression),
-			ExpressionAttributeValues: expressionAttributeMap,
-			ReturnConsumedCapacity:    aws.String("TOTAL"),
+		if dynamoDBIndexName == "" {
+			queryInput = &dynamodb.QueryInput{
+				TableName:                 aws.String(dynamoDBTableName),
+				KeyConditionExpression:    aws.String(dynamoDBKeyConditionExpression),
+				ExpressionAttributeValues: expressionAttributeMap,
+				ReturnConsumedCapacity:    aws.String("TOTAL"),
+			}
+		} else {
+			queryInput = &dynamodb.QueryInput{
+				TableName:                 aws.String(dynamoDBTableName),
+				IndexName:                 aws.String(dynamoDBIndexName),
+				KeyConditionExpression:    aws.String(dynamoDBKeyConditionExpression),
+				ExpressionAttributeValues: expressionAttributeMap,
+				ReturnConsumedCapacity:    aws.String("TOTAL"),
+			}
 		}
 	} else {
-		queryInput = &dynamodb.QueryInput{
-			TableName:                 aws.String(dynamoDBTableName),
-			KeyConditionExpression:    aws.String(dynamoDBKeyConditionExpression),
-			ExpressionAttributeValues: expressionAttributeMap,
-			FilterExpression:          aws.String(dynamoDBFilterExpression),
-			ReturnConsumedCapacity:    aws.String("TOTAL"),
+		if dynamoDBIndexName == "" {
+			queryInput = &dynamodb.QueryInput{
+				TableName:                 aws.String(dynamoDBTableName),
+				KeyConditionExpression:    aws.String(dynamoDBKeyConditionExpression),
+				ExpressionAttributeValues: expressionAttributeMap,
+				FilterExpression:          aws.String(dynamoDBFilterExpression),
+				ReturnConsumedCapacity:    aws.String("TOTAL"),
+			}
+		} else {
+			queryInput = &dynamodb.QueryInput{
+				TableName:                 aws.String(dynamoDBTableName),
+				IndexName:                 aws.String(dynamoDBIndexName),
+				KeyConditionExpression:    aws.String(dynamoDBKeyConditionExpression),
+				ExpressionAttributeValues: expressionAttributeMap,
+				FilterExpression:          aws.String(dynamoDBFilterExpression),
+				ReturnConsumedCapacity:    aws.String("TOTAL"),
+			}
 		}
 	}
 

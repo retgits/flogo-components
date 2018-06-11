@@ -17,9 +17,9 @@ import (
 const (
 	ivAwsAccessKeyID     = "awsAccessKeyID"
 	ivAwsSecretAccessKey = "awsSecretAccessKey"
-	ivAwsRegion          = "awsDefaultRegion"
-	ivDynamoDBTableName  = "dynamoDBTableName"
-	ivDynamoDBRecord     = "dynamoDBRecord"
+	ivAwsRegion          = "awsRegion"
+	ivDynamoDBTableName  = "DynamoDBTableName"
+	ivDynamoDBRecord     = "DynamoDBRecord"
 
 	ovResult = "result"
 )
@@ -104,7 +104,8 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 	// Put the item in DynamoDB
 	_, err1 := dynamoService.PutItem(input)
 	if err1 != nil {
-		log.Errorf("Error while executing query [%s]", err)
+		log.Errorf("Error while executing query [%s]", err1)
+		context.SetOutput(ovResult, "ERROR")
 	} else {
 		context.SetOutput(ovResult, "Added record to DynamoDB")
 	}
