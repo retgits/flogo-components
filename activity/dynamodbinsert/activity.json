@@ -3,7 +3,7 @@
     "type": "flogo:activity",
     "ref": "github.com/ecarlier-tibco/flogo-components/activity/dynamodbinsert",
     "version": "0.1.0",
-    "title": "DynamoDB Insert",
+    "title": "DynamoDB Insert ERC",
     "description": "Insert an object into Amazon DynamoDB",
     "author": "retgits",
     "homepage": "https://github.com/ecarlier-tibco/flogo-components/tree/master/activity/dynamodbinsert",
