@@ -29,6 +29,11 @@
       "required": true
     },
     {
+      "name": "dynamoDBIndexName",
+      "type": "string",
+      "required": false
+    },
+    {
       "name": "dynamoDBKeyConditionExpression",
       "type": "string",
       "required": true
