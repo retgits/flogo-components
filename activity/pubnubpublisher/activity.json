@@ -19,6 +19,11 @@
             "required": true
         },
         {
+            "name": "uuid",
+            "type": "string",
+            "required": false
+        },
+        {
             "name": "channel",
             "type": "string",
             "required": true

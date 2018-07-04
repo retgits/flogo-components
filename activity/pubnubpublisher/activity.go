@@ -12,6 +12,7 @@ const (
 	ivSubscribeKey = "subscribeKey"
 	ivChannel      = "channel"
 	ivMessage      = "message"
+	ivUUID         = "uuid"
 	ovResult       = "result"
 )
 
@@ -40,10 +41,14 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 	subscribeKey := context.GetInput(ivSubscribeKey).(string)
 	channel := context.GetInput(ivChannel).(string)
 	message := context.GetInput(ivMessage).(string)
+	uuid := context.GetInput(ivUUID).(string)
 
 	config := pubnub.NewConfig()
 	config.PublishKey = publishKey
 	config.SubscribeKey = subscribeKey
+	if len(uuid) > 0 {
+		config.UUID = uuid
+	}
 
 	pn := pubnub.NewPubNub(config)
 

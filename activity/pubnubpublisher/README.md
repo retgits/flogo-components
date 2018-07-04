@@ -29,6 +29,11 @@ Inputs and Outputs:
             "required": true
         },
         {
+            "name": "uuid",
+            "type": "string",
+            "required": false
+        },
+        {
             "name": "channel",
             "type": "string",
             "required": true
@@ -52,6 +57,7 @@ Inputs and Outputs:
 |:-------------|:---------------------------------------------|
 | publishKey   | The Publish Key from your PubNub Key Set     |
 | subscribeKey | The Subscribe Key from your PubNub Key Set   |
+| uuid         | The UUID for the Client connection           |
 | channel      | The channel you want to publish a message to |
 | message      | The actual message you want to send          |
 

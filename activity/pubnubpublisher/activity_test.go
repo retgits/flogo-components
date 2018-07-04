@@ -24,6 +24,9 @@ var (
 
 	// The actual message you want to send
 	message = ""
+
+	// The UUID for the Client connection
+	uuid = ""
 )
 
 func getActivityMetadata() *activity.Metadata {
@@ -68,6 +71,7 @@ func TestPublish(t *testing.T) {
 	tc.SetInput("subscribeKey", subscribeKey)
 	tc.SetInput("channel", channel)
 	tc.SetInput("message", message)
+	tc.SetInput("uuid", uuid)
 	act.Eval(tc)
 
 	//check result attr
