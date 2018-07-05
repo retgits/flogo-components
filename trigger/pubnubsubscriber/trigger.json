@@ -1,12 +1,12 @@
 {
     "name": "pubnub-subscriber",
     "type": "flogo:trigger",
-    "ref": "github.com/retgits/flogo-components/trigger/pubnub",
+    "ref": "github.com/retgits/flogo-components/trigger/pubnubsubscriber",
     "version": "0.1.0",
     "title": "Receive PubNub Messages",
     "description": "PubNub Subscriber",
     "author": "retgits",
-    "homepage": "https://github.com/retgits/flogo-components/trigger/pubnub",
+    "homepage": "https://github.com/retgits/flogo-components/trigger/pubnubsubscriber",
     "settings":[
         {
           "name": "publishKey",
