@@ -1,0 +1,64 @@
+package trellocard
+
+import (
+	"github.com/TIBCOSoftware/flogo-lib/core/activity"
+)
+
+var jsonMetadata = `{
+    "name": "trellocard",
+    "type": "flogo:activity",
+    "ref": "github.com/retgits/flogo-components/activity/trellocard",
+    "version": "0.1.0",
+    "title": "Trello Cards",
+    "description": "Create a new Trello card",
+    "author": "retgits",
+    "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/trellocard",
+    "inputs": [
+        {
+            "name": "token",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "appkey",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "list",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "position",
+            "type": "string",
+            "allowed": [
+                "top",
+                "bottom"
+            ],
+            "required": true
+        },
+        {
+            "name": "title",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "description",
+            "type": "string"
+        }
+    ],
+    "outputs": [
+        {
+            "name": "result",
+            "type": "string"
+        }
+    ]
+}
+`
+
+// init create & register activity
+func init() {
+	md := activity.NewMetadata(jsonMetadata)
+	activity.Register(NewActivity(md))
+}
