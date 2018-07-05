@@ -16,6 +16,7 @@ My collection of custom built flogo components
 * [gzip](activity/gzip): Read and write gzip format compressed files
 * [ifttt webhook](activity/iftttwebhook): Send webhook requests to IFTTT
 * [null](activity/null): An activity that does nothing (useful for branching out right after the trigger)
+* [pubnubpublisher](activity/pubnubpublisher): An activity that publishes messages to PubNub
 * [queryparser](acitivity/queryparser): Parse a query string into name/value pairs
 * [randomnumber](activity/randomnumber): Generate a random unique number between the min and max value
 * [randomstring](activity/randomstring): Generate a random string consisting with the length you specify
@@ -23,9 +24,14 @@ My collection of custom built flogo components
 * [trellocard](activity/trellocard): Create a new Trello card
 * [writetofile](activity/writetofile): Write to a file
 
+### Triggers
+* [pubnubsubscriber](trigger/pubnubsubscriber): A trigger to receive messages from PubNub
+
 ### Apps
 * [invoiceservice](apps/invoiceservice): A simple service listening to requests on a port exposed as environment variable, sending back random data and leveraging the [paymentservice](apps/paymentservice)
+* [github-lambda](https://github.com/retgits/github-lambda): A Flogo powered Lambda function to get new GitHub issues (based on the Flogo Go API)
 * [kubefiles](apps/kubefiles): Files to deploy the [invoiceservice](apps/invoiceservice) and [paymentservice](apps/paymentservice) to Kubernetes
 * [paymentservice](apps/paymentservice): A simple service listening to requests on a port exposed as environment variable, sending back a random date
 * [serverless-demo](apps/serverless-demo): A collection of three Flogo apps deployed on AWS Lambda, where one app queries a DynamoDB, one app queries a MySQL instance and one app collects that data and presents it using an API Gateway
 * [tci-combinator-app](apps/tci-combinator-app): An API spec and a Flogo app that work in TIBCO Cloud Integation that communicates with the apps from the [serverless-demo](apps/serverless-demo)
+* [trello-lambda](https://github.com/retgits/trello-lambda): A Flogo powered Lambda function to create new Trello cards (based on the Flogo Go API)
