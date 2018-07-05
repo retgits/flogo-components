@@ -59,19 +59,6 @@ func (t *PubNubTrigger) Initialize(ctx trigger.InitContext) error {
 		return fmt.Errorf("no subscribeKey found for trigger '%s' in settings", t.config.Id)
 	}
 
-	// Create a new PubNub config
-	pnConfig := pubnub.NewConfig()
-	pnConfig.SubscribeKey = t.config.GetSetting("publishKey")
-	pnConfig.PublishKey = t.config.GetSetting("subscribeKey")
-
-	// If the uuid item exists set the UUID of the client
-	if _, ok := t.config.Settings["uuid"]; ok {
-		pnConfig.UUID = t.config.GetSetting("uuid")
-	}
-
-	// Create a new PubNub instance and store that in the trigger struct
-	t.pnInstance = pubnub.NewPubNub(pnConfig)
-
 	// Create a new map to hold channels and handlers
 	handlerMap := make(map[string]*trigger.Handler)
 
@@ -91,39 +78,55 @@ func (t *PubNubTrigger) Initialize(ctx trigger.InitContext) error {
 }
 
 func (t *PubNubTrigger) Start() error {
+	// Create a new PubNub config
+	pnConfig := pubnub.NewConfig()
+	pnConfig.PublishKey = t.config.GetSetting("publishKey")
+	pnConfig.SubscribeKey = t.config.GetSetting("subscribeKey")
+
+	// If the uuid item exists set the UUID of the client
+	if _, ok := t.config.Settings["uuid"]; ok {
+		pnConfig.UUID = t.config.GetSetting("uuid")
+	}
+
+	// Create a new PubNub instance and store that in the trigger struct
+	pn := pubnub.NewPubNub(pnConfig)
+
 	// Create a new Listener
 	listener := pubnub.NewListener()
-	t.pnInstance.AddListener(listener)
+	pn.AddListener(listener)
 
 	// Subscribe to all channels
 	channelArray := make([]string, 0)
 	for channel := range t.handlerMap {
 		channelArray = append(channelArray, channel)
 	}
-	t.pnInstance.Subscribe().Channels(channelArray).Execute()
+	pn.Subscribe().Channels(channelArray).Execute()
 
-	for {
-		select {
-		case status := <-listener.Status:
-			switch status.Category {
-			case pubnub.PNDisconnectedCategory:
-				logger.Info("Received status [pubnub.PNDisconnectedCategory], this is the expected category for an unsubscribe. This means there was no error in unsubscribing from everything")
-			case pubnub.PNConnectedCategory:
-				logger.Info("Received status [pubnub.PNConnectedCategory], this is expected for a subscribe, this means there is no error or issue whatsoever")
-			case pubnub.PNReconnectedCategory:
-				logger.Info("Received status [pubnub.PNReconnectedCategory], this usually occurs if subscribe temporarily fails but reconnects. This means there was an error but there is no longer any issue")
-			case pubnub.PNAccessDeniedCategory:
-				logger.Info("Received status [pubnub.PNAccessDeniedCategory], this means that PAM does allow this client to subscribe to this channel and channel group configuration. This is another explicit error")
+	go func() {
+		for {
+			select {
+			case status := <-listener.Status:
+				switch status.Category {
+				case pubnub.PNDisconnectedCategory:
+					logger.Info("Received status [pubnub.PNDisconnectedCategory], this is the expected category for an unsubscribe. This means there was no error in unsubscribing from everything")
+				case pubnub.PNConnectedCategory:
+					logger.Info("Received status [pubnub.PNConnectedCategory], this is expected for a subscribe, this means there is no error or issue whatsoever")
+				case pubnub.PNReconnectedCategory:
+					logger.Info("Received status [pubnub.PNReconnectedCategory], this usually occurs if subscribe temporarily fails but reconnects. This means there was an error but there is no longer any issue")
+				case pubnub.PNAccessDeniedCategory:
+					logger.Info("Received status [pubnub.PNAccessDeniedCategory], this means that PAM does allow this client to subscribe to this channel and channel group configuration. This is another explicit error")
+				}
+			case message := <-listener.Message:
+				logger.Debugf("%v", message)
+				// Find the handler that is associated with the channel, else ignore the message
+				if _, ok := t.handlerMap[message.Channel]; ok {
+					onMessage(message, t.handlerMap[message.Channel])
+				}
+			case <-listener.Presence:
+				// TODO: Precense allows you to subscribe to realtime Presence events, such as join, leave, and timeout, by UUID. This is currently not implemented
 			}
-		case message := <-listener.Message:
-			// Find the handler that is associated with the channel, else ignore the message
-			if _, ok := t.handlerMap[message.Channel]; ok {
-				onMessage(message, t.handlerMap[message.Channel])
-			}
-		case <-listener.Presence:
-			// TODO: Precense allows you to subscribe to realtime Presence events, such as join, leave, and timeout, by UUID. This is currently not implemented
 		}
-	}
+	}()
 
 	return nil
 }
@@ -142,7 +145,7 @@ func (t *PubNubTrigger) Stop() error {
 func onMessage(message *pubnub.PNMessage, handler *trigger.Handler) {
 	// Create a map to hold the trigger data
 	triggerData := map[string]interface{}{
-		"message":      message.Message.(string),
+		"message":      message.Message,
 		"channel":      message.Channel,
 		"subscription": message.Subscription,
 		"publisher":    message.Publisher,
