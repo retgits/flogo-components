@@ -1,12 +1,12 @@
 {
     "name": "dynamodbinsert",
     "type": "flogo:activity",
-    "ref": "github.com/ecarlier-tibco/flogo-components/activity/dynamodbinsert",
-    "version": "0.1.0",
-    "title": "DynamoDB Insert ERC",
+    "ref": "github.com/retgits/flogo-components/activity/dynamodbinsert",
+    "version": "0.1.1",
+    "title": "DynamoDB Insert",
     "description": "Insert an object into Amazon DynamoDB",
     "author": "retgits",
-    "homepage": "https://github.com/ecarlier-tibco/flogo-components/tree/master/activity/dynamodbinsert",
+    "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/dynamodbinsert",
     "inputs":[
       {
         "name": "awsAccessKeyID",
