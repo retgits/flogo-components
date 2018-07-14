@@ -1,12 +1,12 @@
 {
   "name": "dynamodbquery",
   "type": "flogo:activity",
-  "ref": "github.com/ecarlier-tibco/flogo-components/activity/dynamodbquery",
-  "version": "0.2.0",
+  "ref": "github.com/retgits/flogo-components/activity/dynamodbquery",
+  "version": "0.2.1",
   "title": "DynamoDB Query",
   "description": "Query objects from Amazon DynamoDB",
   "author": "retgits",
-  "homepage": "https://github.com/ecarlier-tibco/flogo-components/tree/master/activity/dynamodbquery",
+  "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/dynamodbquery",
   "inputs":[
     {
       "name": "awsAccessKeyID",
