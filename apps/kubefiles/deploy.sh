@@ -378,7 +378,7 @@ deploy_golang () {
     echo "[ENTER]"
     read -p ""
     cd $GOPTH/src/github.com/retgits/flogo-components/apps/paymentservice-go
-    kubectl apply -f payment-svc.yml
+    kubectl apply -f payment-go-svc.yml
 
     echo ""
     echo "You now have a docker container that is accessible as a service on Kubernetes"
@@ -410,7 +410,7 @@ deploy_golang () {
     echo "All done! You now have two Flogo apps running on a Kubernetes cluster which you"
     echo "invoke by sending a curl message to the Kubernetes IP address or localhost if"
     echo "you're running Docker for Mac. You can execute a command like"
-    echo "curl `minikube service invoice-svc --url`/api/invoices/1234 which will return something like"
+    echo "curl `minikube service invoice-go-svc --url`/api/invoices/1234 which will return something like"
     echo "{\"amount\":1162,\"balance\":718,\"currency\":\"USD\",\"expectedPaymentDate\":\"2018-03-02\",\"id\":\"1234\",\"ref\":\"INV-1234\"}"
     echo ""
     success "Happy Kube-ing!!"
