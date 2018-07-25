@@ -1,0 +1,43 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: invoice-go-svc
+  name: invoice-go-svc
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: invoice-go-svc
+  template:
+    metadata:
+      labels:
+        run: invoice-go-svc
+    spec:
+      containers:
+      - name: invoice-go-svc
+        image: retgits/invoiceservice-go:latest
+        imagePullPolicy: Always
+        env:
+          - name: PAYMENTSERVICE
+            value: http://payment-go-svc.default.svc.cluster.local/api/expected-date/:id
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: invoice-go-svc
+  name: invoice-go-svc
+  namespace: default
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    run: invoice-go-svc
+  type: LoadBalancer

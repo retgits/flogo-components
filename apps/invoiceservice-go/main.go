@@ -24,14 +24,7 @@ var (
 
 func main() {
 	// Create a new Flogo app
-	app := flogo.NewApp()
-
-	// Convert the HTTPPort to an integer
-	port, err := strconv.Atoi(httpport)
-
-	// Register the HTTP trigger
-	trg := app.NewTrigger(&rt.RestTrigger{}, map[string]interface{}{"port": port})
-	trg.NewFuncHandler(map[string]interface{}{"method": "GET", "path": "/api/invoices/:id"}, handler)
+	app := appBuilder()
 
 	e, err := flogo.NewEngine(app)
 
@@ -41,6 +34,22 @@ func main() {
 	}
 
 	engine.RunEngine(e)
+}
+
+func appBuilder() *flogo.App {
+	app := flogo.NewApp()
+
+	// Convert the HTTPPort to an integer
+	port, err := strconv.Atoi(httpport)
+	if err != nil {
+		logger.Error(err)
+	}
+
+	// Register the HTTP trigger
+	trg := app.NewTrigger(&rt.RestTrigger{}, map[string]interface{}{"port": port})
+	trg.NewFuncHandler(map[string]interface{}{"method": "GET", "path": "/api/invoices/:id"}, handler)
+
+	return app
 }
 
 func handler(ctx context.Context, inputs map[string]*data.Attribute) (map[string]*data.Attribute, error) {
@@ -76,27 +85,26 @@ func handler(ctx context.Context, inputs map[string]*data.Attribute) (map[string
 	balance := strconv.Itoa(out["result"].Value().(int))
 
 	// Call out to another service
-	in = map[string]interface{}{"uri": fmt.Sprintf("%s%s", paymentservice, id)}
+	in = map[string]interface{}{"method": "GET", "uri": fmt.Sprintf("%s%s", paymentservice, id)}
+	logger.Info(in)
 	out, err = flogo.EvalActivity(&rest.RESTActivity{}, in)
 	if err != nil {
 		return nil, err
 	}
+	//expectedDate := out["data"].Value().(map[string]interface{})["expectedDate"].(string)
 
 	// The return message is a map[string]*data.Attribute which we'll have to construct
-	response := make(map[string]*data.Attribute)
+	response := make(map[string]interface{})
+	response["id"] = id
+	response["ref"] = ref
+	response["amount"] = amount
+	response["balance"] = balance
+	//response["expectedPaymentDate"] = expectedDate
+	response["currency"] = "USD"
 
-	attr, _ := data.NewAttribute("id", data.TypeString, id)
-	response["id"] = attr
-	attr, _ = data.NewAttribute("ref", data.TypeString, ref)
-	response["ref"] = attr
-	attr, _ = data.NewAttribute("amount", data.TypeString, amount)
-	response["amount"] = attr
-	attr, _ = data.NewAttribute("balance", data.TypeString, balance)
-	response["balance"] = attr
-	//attr, _ = data.NewAttribute("expectedPaymentDate", data.TypeString, id)
-	//response["expectedPaymentDate"] = attr
-	attr, _ = data.NewAttribute("currency", data.TypeString, "USD")
-	response["currency"] = attr
+	ret := make(map[string]*data.Attribute)
+	ret["code"], _ = data.NewAttribute("code", data.TypeInteger, 200)
+	ret["data"], _ = data.NewAttribute("data", data.TypeAny, response)
 
-	return response, nil
+	return ret, nil
 }

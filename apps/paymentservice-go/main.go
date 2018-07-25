@@ -21,14 +21,7 @@ var (
 
 func main() {
 	// Create a new Flogo app
-	app := flogo.NewApp()
-
-	// Convert the HTTPPort to an integer
-	port, err := strconv.Atoi(httpport)
-
-	// Register the HTTP trigger
-	trg := app.NewTrigger(&rest.RestTrigger{}, map[string]interface{}{"port": port})
-	trg.NewFuncHandler(map[string]interface{}{"method": "GET", "path": "/api/expected-date/:invoiceId"}, handler)
+	app := appBuilder()
 
 	e, err := flogo.NewEngine(app)
 
@@ -40,7 +33,24 @@ func main() {
 	engine.RunEngine(e)
 }
 
-func handler(ctx context.Context, inputs map[string]*data.Attribute) (map[string]*data.Attribute, error) {
+func appBuilder() *flogo.App {
+	app := flogo.NewApp()
+
+	// Convert the HTTPPort to an integer
+	port, err := strconv.Atoi(httpport)
+	if err != nil {
+		logger.Error(err)
+	}
+
+	// Register the HTTP trigger
+	trg := app.NewTrigger(&rest.RestTrigger{}, map[string]interface{}{"port": port})
+	trg.NewFuncHandler(map[string]interface{}{"method": "GET", "path": "/api/expected-date/:invoiceId"}, Handler)
+
+	return app
+}
+
+// Handler is the function that gets executed when the engine receives a message
+func Handler(ctx context.Context, inputs map[string]*data.Attribute) (map[string]*data.Attribute, error) {
 	// Get the ID from the path
 	id := inputs["pathParams"].Value().(map[string]string)["invoiceId"]
 
@@ -63,12 +73,13 @@ func handler(ctx context.Context, inputs map[string]*data.Attribute) (map[string
 	expectedPaymentDate := out["result"].Value().(string)
 
 	// The return message is a map[string]*data.Attribute which we'll have to construct
-	response := make(map[string]*data.Attribute)
+	response := make(map[string]interface{})
+	response["id"] = id
+	response["expectedDate"] = expectedPaymentDate
 
-	attr, _ := data.NewAttribute("id", data.TypeString, id)
-	response["id"] = attr
-	attr, _ = data.NewAttribute("expectedDate", data.TypeString, expectedPaymentDate)
-	response["expectedDate"] = attr
+	ret := make(map[string]*data.Attribute)
+	ret["code"], _ = data.NewAttribute("code", data.TypeInteger, 200)
+	ret["data"], _ = data.NewAttribute("data", data.TypeAny, response)
 
-	return response, nil
+	return ret, nil
 }
