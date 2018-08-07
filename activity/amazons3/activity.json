@@ -2,7 +2,7 @@
     "name": "amazons3",
     "type": "flogo:activity",
     "ref": "github.com/retgits/flogo-components/activity/amazons3",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "title": "Amazon S3",
     "description": "Upload or Download files from Amazon Simple Storage Service (S3)",
     "author": "retgits",
@@ -14,7 +14,8 @@
             "allowed": [
                 "download",
                 "upload",
-                "delete"
+                "delete",
+                "copy"
             ],
             "required": true
         },
@@ -45,6 +46,10 @@
         },
         {
             "name": "localLocation",
+            "type": "string"
+        },
+        {
+            "name": "s3NewLocation",
             "type": "string"
         }
     ],

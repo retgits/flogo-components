@@ -25,7 +25,8 @@ Inputs and Outputs:
             "allowed": [
                 "download",
                 "upload",
-                "delete"
+                "delete",
+                "copy"
             ],
             "required": true
         },
@@ -57,6 +58,10 @@ Inputs and Outputs:
         {
             "name": "localLocation",
             "type": "string"
+        },
+        {
+            "name": "s3NewLocation",
+            "type": "string"
         }
     ],
     "outputs": [
@@ -70,13 +75,14 @@ Inputs and Outputs:
 ## Inputs
 | Input              | Description    |
 |:-------------------|:---------------|
-| action             | The action you want to take, either `download`, `upload`, or `delete` |
+| action             | The action you want to take, either `download`, `upload`, `delete`, or `copy` |
 | awsAccessKeyID     | Your AWS Access Key (only needed if you don't give your Lambda function rights to invoke S3 reads and puts) |
 | awsSecretAccessKey | Your AWS Secret Key (only needed if you don't give your Lambda function rights to invoke S3 reads and puts) |
 | awsRegion          | The AWS region your S3 bucket is in |
 | s3BucketName       | The name of your S3 bucket |
 | s3Location         | The file location on S3, this should be a full path (like `/bla/temp.txt`) |
 | localLocation      | The `localLocation` is the full path to a file (like `/bla/temp.txt`) when uploading a file or the full path to a directory (like `./tmp`) when downloading a file |
+| s3NewLocation      | The new file location on S3 of you want to copy a file, this should be a full path (like `/bla/temp.txt`) |
 
 ## Ouputs
 | Output    | Description    |

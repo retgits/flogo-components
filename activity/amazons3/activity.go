@@ -2,6 +2,7 @@
 package amazons3
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -22,6 +23,7 @@ const (
 	ivS3BucketName       = "s3BucketName"
 	ivLocalLocation      = "localLocation"
 	ivS3Location         = "s3Location"
+	ivS3NewLocation      = "s3NewLocation"
 	ovResult             = "result"
 )
 
@@ -53,6 +55,7 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 	// localLocation is a file when uploading a file or a directory when downloading a file
 	localLocation := context.GetInput(ivLocalLocation).(string)
 	s3Location := context.GetInput(ivS3Location).(string)
+	s3NewLocation := context.GetInput(ivS3NewLocation).(string)
 
 	// AWS Credentials, only if needed
 	var awsAccessKeyID, awsSecretAccessKey = "", ""
@@ -82,44 +85,25 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 	}
 
 	// See which action needs to be taken
+	var s3err error
 	switch action {
 	case "download":
-		err := downloadFileFromS3(awsSession, localLocation, s3Location, s3BucketName)
-		if err != nil {
-			// Set the output value in the context
-			context.SetOutput(ovResult, err.Error())
-			return true, err
-		}
-
-		// Set the output value in the context
-		context.SetOutput(ovResult, "OK")
-		return true, nil
+		s3err = downloadFileFromS3(awsSession, localLocation, s3Location, s3BucketName)
 	case "upload":
-		err := uploadFileToS3(awsSession, localLocation, s3Location, s3BucketName)
-		if err != nil {
-			// Set the output value in the context
-			context.SetOutput(ovResult, err.Error())
-			return true, err
-		}
-
-		// Set the output value in the context
-		context.SetOutput(ovResult, "OK")
-		return true, nil
+		s3err = uploadFileToS3(awsSession, localLocation, s3Location, s3BucketName)
 	case "delete":
-		err := deleteFileFromS3(awsSession, s3Location, s3BucketName)
-		if err != nil {
-			// Set the output value in the context
-			context.SetOutput(ovResult, err.Error())
-			return true, err
-		}
-
+		s3err = deleteFileFromS3(awsSession, s3Location, s3BucketName)
+	case "copy":
+		s3err = copyFileOnS3(awsSession, s3Location, s3BucketName, s3NewLocation)
+	}
+	if s3err != nil {
 		// Set the output value in the context
-		context.SetOutput(ovResult, "OK")
-		return true, nil
+		context.SetOutput(ovResult, s3err.Error())
+		return true, s3err
 	}
 
 	// Set the output value in the context
-	context.SetOutput(ovResult, "NOK")
+	context.SetOutput(ovResult, "OK")
 
 	return true, nil
 }
@@ -190,6 +174,27 @@ func uploadFileToS3(awsSession *session.Session, localFile string, s3Location st
 
 	// Upload the file
 	_, err = s3Uploader.Upload(uploadInput)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// Function to copy a file in an S3 bucket
+func copyFileOnS3(awsSession *session.Session, s3Location string, s3BucketName string, s3NewLocation string) error {
+	// Create an instance of the S3 Session
+	s3Session := s3.New(awsSession)
+
+	// Prepare the copy object
+	objectInput := &s3.CopyObjectInput{
+		Bucket:     aws.String(s3BucketName),
+		CopySource: aws.String(fmt.Sprintf("/%s/%s", s3BucketName, s3Location)),
+		Key:        aws.String(s3NewLocation),
+	}
+
+	// Copy the object
+	_, err := s3Session.CopyObject(objectInput)
 	if err != nil {
 		return err
 	}
