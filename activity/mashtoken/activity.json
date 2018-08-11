@@ -1,0 +1,54 @@
+{
+    "name": "mashtoken",
+    "type": "flogo:activity",
+    "ref": "github.com/retgits/flogo-components/activity/mashtoken",
+    "version": "0.2.0",
+    "title": "Mashery Token",
+    "description": "Get a Mashery Token",
+    "author": "retgits",
+    "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/mashtoken",
+    "inputs": [
+        {
+            "name": "username",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "password",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "scope",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "basicauth",
+            "type": "string",
+            "required": true
+        }
+    ],
+    "outputs": [
+        {
+            "name": "accesstoken",
+            "type": "string"
+        },
+        {
+            "name": "tokentype",
+            "type": "string"
+        },
+        {
+            "name": "expiresin",
+            "type": "string"
+        },
+        {
+            "name": "refreshtoken",
+            "type": "string"
+        },
+        {
+            "name": "scope",
+            "type": "string"
+        }
+    ]
+}

@@ -15,6 +15,7 @@ My collection of custom built flogo components
 * [githubissues](activity/githubissues): Get the GitHub issues assigned to an authenticated user
 * [gzip](activity/gzip): Read and write gzip format compressed files
 * [ifttt webhook](activity/iftttwebhook): Send webhook requests to IFTTT
+* [mashtoken](activity/mashtoken): Get a login token for TIBCO Cloud Mashery
 * [null](activity/null): An activity that does nothing (useful for branching out right after the trigger)
 * [pubnubpublisher](activity/pubnubpublisher): An activity that publishes messages to PubNub
 * [queryparser](acitivity/queryparser): Parse a query string into name/value pairs
