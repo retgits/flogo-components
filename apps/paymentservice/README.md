@@ -43,3 +43,6 @@ If you want to import this flow into Flogo Web, please note there is a this is a
 
 * Random Number: https://github.com/retgits/flogo-components/activity/randomnumber
 * Add to Date: https://github.com/retgits/flogo-components/activity/addtodate
+
+## Nothing but Go?
+If you want to see the same app, built with the Flogo Go API, check out the [paymentservice-go](../paymentservice-go) app

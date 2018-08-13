@@ -50,3 +50,6 @@ If you want to import this flow into Flogo Web, please note there is a this is a
 * Random Number: https://github.com/retgits/flogo-components/activity/randomnumber
 * Random String: https://github.com/retgits/flogo-components/activity/randomstring
 * Combine: https://github.com/jvanderl/flogo-components/activity/combine
+
+## Nothing but Go?
+If you want to see the same app, built with the Flogo Go API, check out the [invoiceservice-go](../invoiceservice-go) app

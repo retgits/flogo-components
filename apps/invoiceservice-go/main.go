@@ -1,9 +1,11 @@
-//go:generate go run ../../../../TIBCOSoftware/flogo-lib/flogo/gen/gen.go $GOPATH
+//go:generate go run $GOPATH/src/github.com/TIBCOSoftware/flogo-lib/flogo/gen/gen.go $GOPATH
 package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strconv"
 
@@ -48,8 +50,34 @@ func appBuilder() *flogo.App {
 	// Register the HTTP trigger
 	trg := app.NewTrigger(&rt.RestTrigger{}, map[string]interface{}{"port": port})
 	trg.NewFuncHandler(map[string]interface{}{"method": "GET", "path": "/api/invoices/:id"}, handler)
+	trg.NewFuncHandler(map[string]interface{}{"method": "GET", "path": "/swaggerspec"}, SwaggerSpec)
 
 	return app
+}
+
+// SwaggerSpec is the function that gets executedto retrieve the SwaggerSpec
+func SwaggerSpec(ctx context.Context, inputs map[string]*data.Attribute) (map[string]*data.Attribute, error) {
+	// The return message is a map[string]*data.Attribute which we'll have to construct
+	response := make(map[string]interface{})
+	ret := make(map[string]*data.Attribute)
+
+	fileData, err := ioutil.ReadFile("swagger.json")
+	if err != nil {
+		ret["code"], _ = data.NewAttribute("code", data.TypeInteger, 500)
+		response["msg"] = err.Error()
+	} else {
+		ret["code"], _ = data.NewAttribute("code", data.TypeInteger, 200)
+		var data map[string]interface{}
+		if err := json.Unmarshal(fileData, &data); err != nil {
+			panic(err)
+		}
+		response = data
+	}
+
+	ret["data"], _ = data.NewAttribute("data", data.TypeAny, response)
+
+	return ret, nil
+
 }
 
 func handler(ctx context.Context, inputs map[string]*data.Attribute) (map[string]*data.Attribute, error) {
@@ -91,7 +119,7 @@ func handler(ctx context.Context, inputs map[string]*data.Attribute) (map[string
 	if err != nil {
 		return nil, err
 	}
-	//expectedDate := out["data"].Value().(map[string]interface{})["expectedDate"].(string)
+	expectedDate := out["result"].Value().(map[string]interface{})["expectedDate"].(string)
 
 	// The return message is a map[string]*data.Attribute which we'll have to construct
 	response := make(map[string]interface{})
@@ -99,7 +127,7 @@ func handler(ctx context.Context, inputs map[string]*data.Attribute) (map[string
 	response["ref"] = ref
 	response["amount"] = amount
 	response["balance"] = balance
-	//response["expectedPaymentDate"] = expectedDate
+	response["expectedPaymentDate"] = expectedDate
 	response["currency"] = "USD"
 
 	ret := make(map[string]*data.Attribute)

@@ -1,8 +1,10 @@
-//go:generate go run ../../../../TIBCOSoftware/flogo-lib/flogo/gen/gen.go $GOPATH
+//go:generate go run $GOPATH/src/github.com/TIBCOSoftware/flogo-lib/flogo/gen/gen.go $GOPATH
 package main
 
 import (
 	"context"
+	"encoding/json"
+	"io/ioutil"
 	"os"
 	"strconv"
 
@@ -45,8 +47,34 @@ func appBuilder() *flogo.App {
 	// Register the HTTP trigger
 	trg := app.NewTrigger(&rest.RestTrigger{}, map[string]interface{}{"port": port})
 	trg.NewFuncHandler(map[string]interface{}{"method": "GET", "path": "/api/expected-date/:invoiceId"}, Handler)
+	trg.NewFuncHandler(map[string]interface{}{"method": "GET", "path": "/swaggerspec"}, SwaggerSpec)
 
 	return app
+}
+
+// SwaggerSpec is the function that gets executedto retrieve the SwaggerSpec
+func SwaggerSpec(ctx context.Context, inputs map[string]*data.Attribute) (map[string]*data.Attribute, error) {
+	// The return message is a map[string]*data.Attribute which we'll have to construct
+	response := make(map[string]interface{})
+	ret := make(map[string]*data.Attribute)
+
+	fileData, err := ioutil.ReadFile("swagger.json")
+	if err != nil {
+		ret["code"], _ = data.NewAttribute("code", data.TypeInteger, 500)
+		response["msg"] = err.Error()
+	} else {
+		ret["code"], _ = data.NewAttribute("code", data.TypeInteger, 200)
+		var data map[string]interface{}
+		if err := json.Unmarshal(fileData, &data); err != nil {
+			panic(err)
+		}
+		response = data
+	}
+
+	ret["data"], _ = data.NewAttribute("data", data.TypeAny, response)
+
+	return ret, nil
+
 }
 
 // Handler is the function that gets executed when the engine receives a message

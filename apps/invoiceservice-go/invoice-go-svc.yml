@@ -19,7 +19,7 @@ spec:
       containers:
       - name: invoice-go-svc
         image: retgits/invoiceservice-go:latest
-        imagePullPolicy: Always
+        imagePullPolicy: Never
         env:
           - name: PAYMENTSERVICE
             value: http://payment-go-svc.default.svc.cluster.local/api/expected-date/:id
@@ -33,6 +33,9 @@ metadata:
     run: invoice-go-svc
   name: invoice-go-svc
   namespace: default
+  annotations:
+    radik8s/index: 'true'
+    radik8s/swaggerUrl: '/swaggerspec'
 spec:
   ports:
   - port: 80
