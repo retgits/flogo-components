@@ -2,7 +2,7 @@
 
 #--- Variables ---
 DOCKERHUBUSER=retgits
-DOCKERTAG=0.2
+DOCKERTAG=latest
 
 #--- Clean up the dist folder ---
 clean:

@@ -2,7 +2,7 @@
 
 #--- Variables ---
 DOCKERHUBUSER=retgits
-DOCKERTAG=0.2
+DOCKERTAG=latest
 IPADDR=xxx.xxx.xxx.xxx
 
 #--- Get the dependencies ---

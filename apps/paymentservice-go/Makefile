@@ -2,7 +2,7 @@
 
 #--- Variables ---
 DOCKERHUBUSER=retgits
-DOCKERTAG=0.2
+DOCKERTAG=latest
 
 #--- Get the dependencies ---
 deps: 
