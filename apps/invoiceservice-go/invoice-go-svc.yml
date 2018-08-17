@@ -33,9 +33,6 @@ metadata:
     run: invoice-go-svc
   name: invoice-go-svc
   namespace: default
-  annotations:
-    radik8s/index: 'true'
-    radik8s/swaggerUrl: '/swaggerspec'
 spec:
   ports:
   - port: 80
