@@ -134,7 +134,13 @@ message OutMessage {
 To install the trigger into your Web UI, create a new app and click on the “+” icon on the left hand side of the screen. From there click on “Install new” and paste `https://github.com/retgits/flogo-components/trigger/grpctrigger` into the input dialog to get this new trigger.
 
 ### Create an app
-With everythong installed you can create the app using the Web UI as you would for any other app.
+With everythong installed you can create the app using the Web UI as you would for any other app. Note that while constructing the `return` activity, you start each field with a capital letter (generating the structs made all fields exported and with Go that means they start with a capital letter). For the example above, a valid return would be
+```json
+{
+  "Name": "You",
+  "Awesomeness": "Incredible!"
+}
+```
 
 ### Build
 To build the app, you'll have to export it first. From the main screen of your app (where all flows are listed), click "export" and select "App". You can use the following commands to build the app
