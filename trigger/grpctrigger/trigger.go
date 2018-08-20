@@ -10,6 +10,12 @@ import (
 	"github.com/TIBCOSoftware/flogo-lib/core/trigger"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
 	"google.golang.org/grpc"
+
+	// This depencency is needed to properly build the trigger
+	// TODO: Check where this dependency should be registered
+	_ "github.com/jhump/protoreflect/desc/protoparse"
+	// This dependency is needed at runtime (will be part of registration.go)
+	_ "github.com/fatih/structs"
 )
 
 // log is the default package logger
