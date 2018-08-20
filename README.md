@@ -26,6 +26,7 @@ My collection of custom built flogo components
 * [writetofile](activity/writetofile): Write to a file
 
 ### Triggers
+* [grpctrigger](trigger/grpctrigger): A trigger to receive gRPC messages
 * [pubnubsubscriber](trigger/pubnubsubscriber): A trigger to receive messages from PubNub
 
 ### Apps
