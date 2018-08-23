@@ -93,4 +93,4 @@ Inputs and Outputs:
 ## Ouputs
 | Output    | Description    |
 |:----------|:---------------|
-| result    | The result will contain a JSON representation of your result (like `{results:{"param1":"value1","param2":"value2"}}`) |
+| result    | The result will contain a JSON representation of your result (like `{"param1":"value1","param2":"value2"}`) |

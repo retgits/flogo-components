@@ -2,8 +2,6 @@
 package awsssm
 
 import (
-	"bytes"
-	"encoding/json"
 	"strings"
 
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
@@ -123,12 +121,6 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 		}
 	}
 
-	//val1, err1 := prepareMapOutput(dat)
-	//if err1 != nil {
-	//	log.Errorf("Error while retrieving parameter from SSM [%s]", err1)
-	//	return true, err1
-	//}
-
 	context.SetOutput(ovResult, dat)
 	return true, nil
 
@@ -164,18 +156,4 @@ func putSSMParameter(ssmSession *ssm.SSM, name string, overwrite bool, paramtype
 	}
 
 	return *param.Version, nil
-}
-
-// Prepare the output format required
-func prepareMapOutput(dat map[string]interface{}) (map[string]interface{}, error) {
-	jsonString, _ := json.Marshal(dat)
-	var resultinterface interface{}
-	d := json.NewDecoder(bytes.NewReader(jsonString))
-	d.UseNumber()
-	err := d.Decode(&resultinterface)
-	if err != nil {
-		return nil, err
-	}
-	f := map[string]interface{}{"results": resultinterface}
-	return f, nil
 }
