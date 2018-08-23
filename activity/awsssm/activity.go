@@ -82,13 +82,13 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 	ssmSession := ssm.New(awsSession)
 
 	// See which action needs to be taken
+	dat := make(map[string]interface{})
 	switch action {
 	case "store":
 		parameterName := context.GetInput(ivParameterName).(string)
 		overwriteExistingParameter := context.GetInput(ivOverwriteExistingParameter).(bool)
 		parameterType := context.GetInput(ivParameterType).(string)
 		parameterValue := context.GetInput(ivParameterValue).(string)
-		dat := make(map[string]interface{})
 
 		val, err := putSSMParameter(ssmSession, parameterName, overwriteExistingParameter, parameterType, parameterValue)
 		if err != nil {
@@ -97,18 +97,9 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 		}
 		dat[parameterName] = val
 
-		val1, err1 := prepareMapOutput(dat)
-		if err1 != nil {
-			log.Errorf("Error while retrieving parameter from SSM [%s]", err1)
-			return true, err1
-		}
-
-		context.SetOutput(ovResult, val1)
-		return true, nil
 	case "retrieve":
 		parameterName := context.GetInput(ivParameterName).(string)
 		decryptParameter := context.GetInput(ivDecryptParameter).(bool)
-		dat := make(map[string]interface{})
 
 		val, err := getSSMParameter(ssmSession, parameterName, decryptParameter)
 		if err != nil {
@@ -117,19 +108,10 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 		}
 		dat[parameterName] = val
 
-		val1, err1 := prepareMapOutput(dat)
-		if err1 != nil {
-			log.Errorf("Error while retrieving parameter from SSM [%s]", err1)
-			return true, err1
-		}
-
-		context.SetOutput(ovResult, val1)
-		return true, nil
 	case "retrieveList":
 		parameterNames := context.GetInput(ivParameterName).(string)
 		decryptParameter := context.GetInput(ivDecryptParameter).(bool)
 		parameters := strings.Split(parameterNames, ",")
-		dat := make(map[string]interface{})
 
 		for _, parameterName := range parameters {
 			val, err := getSSMParameter(ssmSession, parameterName, decryptParameter)
@@ -139,21 +121,17 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 			}
 			dat[parameterName] = val
 		}
-
-		val1, err1 := prepareMapOutput(dat)
-		if err1 != nil {
-			log.Errorf("Error while retrieving parameter from SSM [%s]", err1)
-			return true, err1
-		}
-
-		context.SetOutput(ovResult, val1)
-		return true, nil
 	}
 
-	// Set the output value in the context
-	context.SetOutput(ovResult, "NOK")
+	//val1, err1 := prepareMapOutput(dat)
+	//if err1 != nil {
+	//	log.Errorf("Error while retrieving parameter from SSM [%s]", err1)
+	//	return true, err1
+	//}
 
+	context.SetOutput(ovResult, dat)
 	return true, nil
+
 }
 
 // getSSMParameter gets a parameter from the AWS Simple Systems Manager service.
