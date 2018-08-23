@@ -12,6 +12,7 @@ My collection of custom built flogo components
 * [downloadfile](activity/downloadfile): Download a file
 * [dynamodbinsert](activity/dynamodbinsert): Insert an object into Amazon DynamoDB
 * [dynamodbquery](activity/dynamodbquery): Query objects from Amazon DynamoDB
+* [envkey](activity/envkey): Get environment variables or the provided fallback value
 * [githubissues](activity/githubissues): Get the GitHub issues assigned to an authenticated user
 * [gzip](activity/gzip): Read and write gzip format compressed files
 * [ifttt webhook](activity/iftttwebhook): Send webhook requests to IFTTT
