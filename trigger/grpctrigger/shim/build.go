@@ -103,7 +103,7 @@ func main() {
 	args := []string{
 		"-I",
 		protoFileLocation,
-		fmt.Sprintf("%s/%s", protoFileLocation, protoFileName),
+		filepath.Join(protoFileLocation, protoFileName),
 		fmt.Sprintf("--go_out=plugins=grpc:%s", grpcTriggerLocation),
 	}
 	cmd := exec.Command("protoc", args...)
