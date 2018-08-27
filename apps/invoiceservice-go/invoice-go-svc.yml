@@ -22,7 +22,7 @@ spec:
         imagePullPolicy: Never
         env:
           - name: PAYMENTSERVICE
-            value: http://payment-go-svc.default.svc.cluster.local/api/expected-date/:id
+            value: http://payment-go-svc.default.svc.cluster.local/api/expected-date/
         ports:
         - containerPort: 8080
 ---
