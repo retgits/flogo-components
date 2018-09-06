@@ -102,7 +102,7 @@
             "name": "MySQL Select",
             "description": "Reads MySQL DB",
             "activity": {
-              "ref": "github.com/Ganitagya/flogo-contrib/activity/mysqlfetch",
+              "ref": "github.com/retgits/flogo-components/activity/mysqlfetch",
               "input": {
                 "query": "select * from customer"
               },
