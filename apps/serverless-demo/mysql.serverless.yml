@@ -16,10 +16,10 @@ provider:
   logRetentionInDays: 1
   # These are the environment variables
   environment:
-    DBNAME: x
-    DBHOST: x
-    DBUSER: x
-    DBPASS: x
+    DBNAME: mydb
+    DBHOST: myinstance.cqp6fskiabzh.us-west-2.rds.amazonaws.com:3306
+    DBUSER: tibco
+    DBPASS: h!llvi3w
 
 # This will create a special zip file with the contents needed to run on Lambda
 package:

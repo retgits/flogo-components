@@ -6,6 +6,7 @@ My collection of custom built flogo components
 ### Activities
 * [addtodate](activity/addtodate): Add a specified number of days to either the current date or a chosen date
 * [amazons3](activity/amazons3): Upload or Download files from Amazon Simple Storage Service (S3)
+* [amazonses](activity/amazonses): Sends emails using Amazon Simple Email Service (SES)
 * [amazonsqssend](activity/amazonsqssend): Send a message using Amazon Simple Queue Service (SQS)
 * [awsssm](activity/amazonssm): Store and Retrieve parameters from the Parameter Store in Amazon Simple Systems Manager (SSM)
 * [commandparser](activity/commandparser): Parses a commandline string into separate arguments
