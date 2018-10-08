@@ -1,0 +1,38 @@
+{
+    "name": "stoplight",
+    "type": "flogo:activity",
+    "ref": "github.com/retgits/flogo-components/activity/stoplight",
+    "version": "0.1.0",
+    "title": "Stoplight",
+    "description": "Red or Green",
+    "author": "retgits",
+    "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/gzip",
+    "inputs": [
+        {
+            "name": "whitelistArray",
+            "type": "object",
+            "required": true
+        },
+        {
+            "name": "whitelist",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "key",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "value",
+            "type": "string",
+            "required": true
+        }
+    ],
+    "outputs": [
+        {
+            "name": "result",
+            "type": "string"
+        }
+    ]
+}

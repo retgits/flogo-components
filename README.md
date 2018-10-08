@@ -24,6 +24,7 @@ My collection of custom built flogo components
 * [randomnumber](activity/randomnumber): Generate a random unique number between the min and max value
 * [randomstring](activity/randomstring): Generate a random string consisting with the length you specify
 * [readfile](activity/readfile): Reads a file
+* [stoplight](activity/stoplight): Red or Green based on a lookup in a whitelist
 * [tomlreader](activity/tomlreader): Reads and queries a TOML file
 * [trellocard](activity/trellocard): Create a new Trello card
 * [writetofile](activity/writetofile): Write to a file
