@@ -2,7 +2,7 @@
     "name": "globalcache",
     "type": "flogo:activity",
     "ref": "github.com/retgits/flogo-components/activity/globalcache",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "title": "GlobalCache",
     "description": "An in-memory key:value store",
     "author": "retgits",
@@ -36,7 +36,7 @@
         {
             "name": "purgeTime",
             "type": "int",
-            "required": true
+            "required": false
         },
         {
             "name": "loadset",
