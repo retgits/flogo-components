@@ -1,0 +1,53 @@
+{
+    "name": "globalcache",
+    "type": "flogo:activity",
+    "ref": "github.com/retgits/flogo-components/activity/globalcache",
+    "version": "0.1.0",
+    "title": "GlobalCache",
+    "description": "An in-memory key:value store",
+    "author": "retgits",
+    "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/globalcache",
+    "inputs": [
+        {
+            "name": "action",
+            "type": "string",
+            "allowed": [
+                "INITIALIZE",
+                "SET",
+                "GET"
+            ],
+            "required": true
+        },
+        {
+            "name": "key",
+            "type": "string",
+            "required": false
+        },
+        {
+            "name": "value",
+            "type": "string",
+            "required": false
+        },
+        {
+            "name": "expiryTime",
+            "type": "int",
+            "required": false
+        },
+        {
+            "name": "purgeTime",
+            "type": "int",
+            "required": true
+        },
+        {
+            "name": "loadset",
+            "type": "string",
+            "required": false
+        }
+    ],
+    "outputs": [
+        {
+            "name": "result",
+            "type": "any"
+        }
+    ]
+}

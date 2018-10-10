@@ -15,6 +15,7 @@ My collection of custom built flogo components
 * [dynamodbquery](activity/dynamodbquery): Query objects from Amazon DynamoDB
 * [envkey](activity/envkey): Get environment variables or the provided fallback value
 * [githubissues](activity/githubissues): Get the GitHub issues assigned to an authenticated user
+* [globalcache](activity/globalcache): An in-memory key:value store based on go-cache
 * [gzip](activity/gzip): Read and write gzip format compressed files
 * [ifttt webhook](activity/iftttwebhook): Send webhook requests to IFTTT
 * [mashtoken](activity/mashtoken): Get a login token for TIBCO Cloud Mashery
@@ -24,7 +25,6 @@ My collection of custom built flogo components
 * [randomnumber](activity/randomnumber): Generate a random unique number between the min and max value
 * [randomstring](activity/randomstring): Generate a random string consisting with the length you specify
 * [readfile](activity/readfile): Reads a file
-* [stoplight](activity/stoplight): Red or Green based on a lookup in a whitelist
 * [tomlreader](activity/tomlreader): Reads and queries a TOML file
 * [trellocard](activity/trellocard): Create a new Trello card
 * [writetofile](activity/writetofile): Write to a file
