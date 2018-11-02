@@ -19,10 +19,10 @@ spec:
       containers:
       - name: invoice-go-svc
         image: retgits/invoiceservice-go:latest
-        imagePullPolicy: Always
+        imagePullPolicy: Never
         env:
           - name: PAYMENTSERVICE
-            value: http://payment-go-svc.default.svc.cluster.local/api/expected-date/:id
+            value: http://payment-go-svc.default.svc.cluster.local/api/expected-date/
         ports:
         - containerPort: 8080
 ---

@@ -1,4 +1,10 @@
-{
+package awsssm
+
+import (
+	"github.com/TIBCOSoftware/flogo-lib/core/activity"
+)
+
+var jsonMetadata = `{
     "name": "amazonssm",
     "type": "flogo:activity",
     "ref": "github.com/retgits/flogo-components/activity/awsssm",
@@ -65,4 +71,11 @@
             "type": "any"
         }
     ]
+}
+`
+
+// init create & register activity
+func init() {
+	md := activity.NewMetadata(jsonMetadata)
+	activity.Register(NewActivity(md))
 }

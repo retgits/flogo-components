@@ -16,9 +16,6 @@ provider:
   logRetentionInDays: 1
   # These are the environment variables
   environment:
-    ACCESSKEY: x
-    REGION: x
-    SECRETKEY: x
     MYSQLARN: x
     DYNAMOARN: x
 

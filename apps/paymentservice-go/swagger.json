@@ -1,0 +1,63 @@
+{
+	"definitions": {
+		"GiveNewSchemaNameHere": {
+			"properties": {
+				"expectedDate": {
+					"default": "2018-02-26",
+					"format": "date",
+					"type": "string"
+				},
+				"id": {
+					"default": "3456",
+					"type": "string"
+				}
+			},
+			"type": "object"
+		}
+	},
+	"info": {
+		"title": "paymentservice",
+		"version": "1.0.0",
+		"x-lastModified": "Aug 08, 2018 13:25PM PST"
+	},
+	"paths": {
+		"/api/expected-date/{invoiceId}": {
+			"get": {
+				"operationId": "getApiExpected-date_invoiceId",
+				"parameters": [
+					{
+						"description": "",
+						"format": "",
+						"in": "path",
+						"name": "invoiceId",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"examples": {
+							"application/json": {
+								"expectedDate": "2018-02-26",
+								"id": "3456"
+							}
+						},
+						"schema": {
+							"$ref": "#/definitions/GiveNewSchemaNameHere"
+						}
+					}
+				}
+			}
+		}
+	},
+	"swagger": "2.0",
+	"host": "integration.cloud.tibcoapps.com:443",
+	"schemes": [
+		"http"
+	],
+	"basePath": "/"
+}

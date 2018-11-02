@@ -60,7 +60,7 @@ func TestEvalRetrieveParameter(t *testing.T) {
 
 	//check result attr
 	result := tc.GetOutput("result")
-	fmt.Printf("[%s]", result)
+	fmt.Printf("[%s]\n", result)
 }
 
 func TestEvalRetrieveParameterList(t *testing.T) {
@@ -86,7 +86,7 @@ func TestEvalRetrieveParameterList(t *testing.T) {
 
 	//check result attr
 	result := tc.GetOutput("result")
-	fmt.Printf("[%s]", result)
+	fmt.Printf("[%s]\n", result)
 }
 
 func TestEvalStoreSimpleParameter(t *testing.T) {
@@ -114,7 +114,7 @@ func TestEvalStoreSimpleParameter(t *testing.T) {
 
 	//check result attr
 	result := tc.GetOutput("result")
-	fmt.Printf("[%s]", result)
+	fmt.Printf("[%s]\n", result)
 }
 
 func TestEvalStoreSecureParameter(t *testing.T) {
@@ -142,5 +142,5 @@ func TestEvalStoreSecureParameter(t *testing.T) {
 
 	//check result attr
 	result := tc.GetOutput("result")
-	fmt.Printf("[%s]", result)
+	fmt.Printf("[%s]\n", result)
 }

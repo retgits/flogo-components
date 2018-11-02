@@ -19,7 +19,7 @@ spec:
       containers:
       - name: payment-go-svc
         image: retgits/paymentservice-go:latest
-        imagePullPolicy: Always
+        imagePullPolicy: Never
         ports:
         - containerPort: 8080
 ---

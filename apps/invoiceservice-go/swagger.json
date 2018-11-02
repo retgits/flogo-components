@@ -1,0 +1,83 @@
+{
+	"definitions": {
+		"GiveNewSchemaNameHere": {
+			"properties": {
+				"amount": {
+					"default": 1162,
+					"type": "integer"
+				},
+				"balance": {
+					"default": 718,
+					"type": "integer"
+				},
+				"currency": {
+					"default": "USD",
+					"type": "string"
+				},
+				"expectedPaymentDate": {
+					"default": "2018-03-02",
+					"format": "date",
+					"type": "string"
+				},
+				"id": {
+					"default": "1234",
+					"type": "string"
+				},
+				"ref": {
+					"default": "INV-1234",
+					"type": "string"
+				}
+			},
+			"type": "object"
+		}
+	},
+	"info": {
+		"title": "invoiceservice",
+		"version": "1.0.0",
+		"x-lastModified": "Aug 08, 2018 13:35PM PST"
+	},
+	"paths": {
+		"/api/invoices/{id}": {
+			"get": {
+				"operationId": "getApiInvoices_id",
+				"parameters": [
+					{
+						"description": "",
+						"format": "",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"examples": {
+							"application/json": {
+								"amount": 1162,
+								"balance": 718,
+								"currency": "USD",
+								"expectedPaymentDate": "2018-03-02",
+								"id": "1234",
+								"ref": "INV-1234"
+							}
+						},
+						"schema": {
+							"$ref": "#/definitions/GiveNewSchemaNameHere"
+						}
+					}
+				}
+			}
+		}
+	},
+	"swagger": "2.0",
+	"host": "localhost:8080",
+	"schemes": [
+		"http"
+	],
+	"basePath": "/"
+}

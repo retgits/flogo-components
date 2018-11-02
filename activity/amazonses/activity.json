@@ -1,0 +1,53 @@
+{
+    "name": "amazonses",
+    "type": "flogo:activity",
+    "ref": "github.com/retgits/flogo-components/activity/amazonses",
+    "version": "0.1.0",
+    "title": "Amazon SES",
+    "description": "Sends emails using Amazon Simple Email Service (SES)",
+    "author": "retgits",
+    "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/amazonses",
+    "inputs": [
+        {
+            "name": "to",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "from",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "content",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "subject",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "awsAccessKeyID",
+            "type": "string",
+            "required": false
+        },
+        {
+            "name": "awsSecretAccessKey",
+            "type": "string",
+            "required": false
+        },
+        {
+            "name": "awsRegion",
+            "type": "string",
+            "required": true
+        }
+    ],
+    "outputs": [
+        {
+            "name": "result",
+            "type": "any"
+        }
+    ]
+}
