@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"flag"
-	syslog "log"
 
 	"github.com/TIBCOSoftware/flogo-lib/core/data"
 	"github.com/TIBCOSoftware/flogo-lib/core/trigger"
@@ -53,7 +52,6 @@ func (t *OpenFaaSTrigger) Initialize(ctx trigger.InitContext) error {
 // Invoke starts the trigger and invokes the action registered in the handler
 func Invoke() (map[string]interface{}, error) {
 	log.Info("Starting OpenFaaS Trigger")
-	syslog.Println("Starting OpenFaaS Trigger")
 
 	// Parse the flags
 	flag.Parse()
@@ -68,7 +66,6 @@ func Invoke() (map[string]interface{}, error) {
 	}
 
 	log.Debugf("Received evt: '%+v'\n", evt)
-	syslog.Printf("Received evt: '%+v'\n", evt)
 
 	// Get the context
 	ctxArg := flag.Lookup("ctx")
@@ -80,7 +77,6 @@ func Invoke() (map[string]interface{}, error) {
 	}
 
 	log.Debugf("Received ctx: '%+v'\n", funcCtx)
-	syslog.Printf("Received ctx: '%+v'\n", funcCtx)
 
 	//select handler, use 0th for now
 	handler := singleton.handlers[0]
