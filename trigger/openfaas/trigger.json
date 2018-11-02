@@ -1,0 +1,33 @@
+{
+    "name": "openfaas",
+    "type": "flogo:trigger",
+    "shim": "plugin",
+    "ref": "github.com/retgits/flogo-components/trigger/openfaas",
+    "version": "0.0.1",
+    "title": "OpenFaaS Trigger",
+    "description": "OpenFaaS Trigger used to start a flow as a function.",
+    "homepage": "https://github.com/retgits/flogo-contrib/tree/master/trigger/openfaas",
+    "settings": [
+    ],
+    "output": [
+      {
+        "name": "context",
+        "type": "object"
+      },
+      {
+        "name": "evt",
+        "type": "object"
+      }
+    ],
+    "reply": [
+      {
+        "name": "data",
+        "type": "any"
+      },
+      {
+        "name": "status",
+        "type": "integer",
+        "value": 200
+      }
+    ]
+  }
