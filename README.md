@@ -32,6 +32,7 @@ My collection of custom built flogo components
 ### Triggers
 * [grpctrigger](trigger/grpctrigger): A trigger to receive gRPC messages
 * [pubnubsubscriber](trigger/pubnubsubscriber): A trigger to receive messages from PubNub
+* [openfaas](trigger/openfaas): A trigger to deploy Go based apps to OpenFaaS
 
 ### Apps
 * [invoiceservice](apps/invoiceservice): A simple service listening to requests on a port exposed as environment variable, sending back random data and leveraging the [paymentservice](apps/paymentservice)
