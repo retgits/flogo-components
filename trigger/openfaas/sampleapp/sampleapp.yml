@@ -1,0 +1,11 @@
+provider:
+  name: faas
+  gateway: http://ec2-54-245-135-34.us-west-2.compute.amazonaws.com:31112
+
+functions:
+  sampleapp:
+    lang: go
+    handler: ./sampleapp
+    image: retgits/sampleapp:latest
+    environment:
+      FLOGO_LOG_LEVEL: ERROR
