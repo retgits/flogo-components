@@ -2,39 +2,18 @@
 package addtodate
 
 import (
-	"io/ioutil"
 	"testing"
 
-	"github.com/TIBCOSoftware/flogo-contrib/action/flow/test"
-	"github.com/TIBCOSoftware/flogo-lib/core/activity"
+	"github.com/project-flogo/core/activity"
+	"github.com/project-flogo/core/support/test"
 	"github.com/stretchr/testify/assert"
 )
 
-var activityMetadata *activity.Metadata
+func TestRegister(t *testing.T) {
 
-func getActivityMetadata() *activity.Metadata {
+	ref := activity.GetRef(&Activity{})
 
-	if activityMetadata == nil {
-		jsonMetadataBytes, err := ioutil.ReadFile("activity.json")
-		if err != nil {
-			panic("No Json Metadata found for activity.json path")
-		}
-
-		activityMetadata = activity.NewMetadata(string(jsonMetadataBytes))
-	}
-
-	return activityMetadata
-}
-
-func TestCreate(t *testing.T) {
-
-	act := NewActivity(getActivityMetadata())
-
-	if act == nil {
-		t.Error("Activity Not Created")
-		t.Fail()
-		return
-	}
+	assert.NotNil(t, ref)
 }
 
 func TestEval(t *testing.T) {
@@ -46,16 +25,50 @@ func TestEval(t *testing.T) {
 		}
 	}()
 
-	act := NewActivity(getActivityMetadata())
-	tc := test.NewTestActivityContext(getActivityMetadata())
+	act, err := New(nil)
+	assert.Nil(t, err)
 
-	//setup attrs
-	tc.SetInput("number", 2)
-	tc.SetInput("units", "months")
-	tc.SetInput("date", "2018-02-17")
-	act.Eval(tc)
+	tc := test.NewActivityContext(act.Metadata())
 
-	//check result attr
+	input := &Input{
+		Date:   "2018-02-17",
+		Units:  "months",
+		Number: 2,
+	}
+
+	tc.SetInputObject(input)
+
+	_, err = act.Eval(tc)
+	assert.Nil(t, err)
+
 	result := tc.GetOutput("result")
 	assert.Equal(t, result, "2018-04-17")
+
+	input = &Input{
+		Date:   "2018-02-17",
+		Units:  "days",
+		Number: 2,
+	}
+
+	tc.SetInputObject(input)
+
+	_, err = act.Eval(tc)
+	assert.Nil(t, err)
+
+	result = tc.GetOutput("result")
+	assert.Equal(t, result, "2018-02-19")
+
+	input = &Input{
+		Date:   "2018-02-17",
+		Units:  "years",
+		Number: 2,
+	}
+
+	tc.SetInputObject(input)
+
+	_, err = act.Eval(tc)
+	assert.Nil(t, err)
+
+	result = tc.GetOutput("result")
+	assert.Equal(t, result, "2020-02-17")
 }

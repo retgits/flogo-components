@@ -1,0 +1,34 @@
+{
+  "name": "addtodate",
+  "type": "flogo:activity",
+  "version": "0.2.0",
+  "title": "Add to Date",
+  "description": "Add a specified number of units to a date",
+  "author": "retgits",
+  "homepage": "https://github.com/retgits/flogo-components/tree/master/activity/addtodate",
+  "input": [
+    {
+      "name": "number",
+      "type": "integer"
+    },
+    {
+      "name": "units",
+      "type": "string",
+      "allowed": [
+        "years",
+        "months",
+        "days"
+      ]
+    },
+    {
+      "name": "date",
+      "type": "string"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "result",
+      "type": "string"
+    }
+  ]
+}
