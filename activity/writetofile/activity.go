@@ -5,6 +5,7 @@ package writetofile
 import (
 	"os"
 	"path/filepath"
+	b64 "encoding/base64"
 
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
@@ -14,6 +15,7 @@ import (
 const (
 	ivFilename = "filename"
 	ivContent  = "content"
+	ivContentType = "contentType"
 	ivAppend   = "append"
 	ivCreate   = "create"
 	ovResult   = "result"
@@ -43,6 +45,7 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 	// Get the action
 	filename := context.GetInput(ivFilename).(string)
 	content := context.GetInput(ivContent).(string)
+	contentType := context.GetInput(ivContentType).(string)
 	append := context.GetInput(ivAppend).(bool)
 	create := context.GetInput(ivCreate).(bool)
 
@@ -74,9 +77,19 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 
 	defer file.Close()
 
-	if _, err = file.WriteString(content); err != nil {
-		context.SetOutput(ovResult, err.Error())
-		return true, err
+	switch contentType {
+	case "base64encoded":
+		// Take base64 encoded data and convert to byte	
+		sDec, _ := b64.StdEncoding.DecodeString(content)
+		if _, err = file.Write([]byte(sDec)); err != nil {
+			context.SetOutput(ovResult, err.Error())
+			return true, err
+		}
+	case "text":
+		if _, err = file.WriteString(content); err != nil {
+			context.SetOutput(ovResult, err.Error())
+			return true, err
+		}
 	}
 
 	context.SetOutput(ovResult, "OK")

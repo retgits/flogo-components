@@ -24,6 +24,11 @@ var jsonMetadata = `{
             "type": "string",
             "required": true
         },
+	{
+	    "name": "contentType",
+	    "type": "string",
+	    "required": true
+	},
         {
             "name": "append",
             "type": "bool"

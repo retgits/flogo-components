@@ -25,7 +25,17 @@
         {
             "name": "create",
             "type": "bool"
-        }
+        },
+	{
+	    "name": "contentType",
+	    "type": "string",
+	    "required": true,
+	    "allowed" : [
+		"text",
+		"base64encoded"
+	    ],
+	    "value": "text"
+	}
     ],
     "outputs": [
         {

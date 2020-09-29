@@ -28,13 +28,25 @@ Inputs and Outputs:
             "type": "string",
             "required": true
         },
+	{
+	    "name": "contentType",
+	    "type": "string",
+	    "required": true,
+	    "allowed": [
+		"text",
+		"base64encoded"
+	    ],
+	    "value": "text"
+	},
         {
             "name": "append",
-            "type": "bool"
+            "type": "bool",
+	    "required": true
         },
         {
             "name": "create",
-            "type": "bool"
+            "type": "bool",
+	    "required": true
         }
     ],
     "outputs": [
@@ -50,6 +62,7 @@ Inputs and Outputs:
 |:---------|:--------------------------------------------------------------------------------|
 | filename | The name of the file you want to write to (like `data.txt` or `./tmp/data.txt`) |
 | content  | The actual content you want to write                                            |
+| contentType | Specify content type (text | base64encoded)				     |
 | append   | Append to the file or overwrite existing content                                |
 | create   | Create the file if it doesn't exist                                             |
 
